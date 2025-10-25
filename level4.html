@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 4: Wiki Freeze & Presentation Panic - Le Grand Jamboree</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+            background-color: #f8fafc; /* Base color */
+            transition: background-color 1.5s ease;
+            /* ADVERTENCIA MOVIDA AL CSS */
+            /* Remember, NO MORE CHANGES UNLESS CRITICAL! */
+        }
+        
+        /* Level 1 Theme (RED) - Replaced Purple */
+        .custom-red { /* RENAMED FROM custom-purple */
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); /* Color de Level 1 */
+        }
+        
+        .text-custom-red { /* RENAMED FROM text-custom-purple */
+            color: #dc2626; /* Color de Level 1 */
+        }
+        
+        .custom-gold {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        /* Flashcard Styles (Exact from Level 3, but color changed) */
+        .flip-card {
+            perspective: 1000px;
+            width: 100%;
+            height: 200px; /* Key change: 200px height */
+        }
+        
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .flip-card-front {
+            /* RED Theme */
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); /* Color de Level 1 */
+            color: white;
+        }
+        
+        .flip-card-back {
+            background: white;
+            color: #374151;
+            border: 2px solid #b91c1c; /* Borde rojo oscuro */
+            transform: rotateY(180deg);
+        }
+
+        /* Activity Styles */
+        .choice-button {
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .choice-button.correct {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .choice-button.incorrect {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        /* Server Upload Button Pulse */
+        #upload-button {
+            transition: all 0.1s ease;
+        }
+
+        /* Sleep Hours Pulse */
+        .sleep-pulse {
+            animation: sleepPulse 0.5s ease-in-out;
+        }
+        
+        @keyframes sleepPulse {
+            0% { transform: scale(1); background-color: #f59e0b; }
+            50% { transform: scale(1.1); background-color: #ef4444; }
+            100% { transform: scale(1); background-color: #f59e0b; }
+        }
+
+        /* Code Block Styling */
+        .code-block {
+            background-color: #1f2937; /* Gray 800 */
+            color: #e5e7eb; /* Gray 200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin-bottom: 1rem;
+        }
+        .code-highlight {
+            color: #fca5a5; /* Red 300 */
+            font-weight: bold;
+        }
+
+        /* NO GEMINI OUTPUT */
+        #hook-output {
+            min-height: 80px;
+            border-left: 4px solid #dc2626; /* RED */
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="min-h-full font-sans transition-all bg-calme" id="game-body">
+    <header class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-10">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html"><div class="flex items-center space-x-2">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center">
+                        <img src="FROG skippit RED.png" alt="igem barcelona-ub logo" class="w-full h-full object-cover p-2">
+                    </div>
+                    <span class="text-custom-red font-bold text-xl">LE GRAND JAMBOREE</span>
+                </div>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <div class="text-right">
+                        <div class="text-xl font-bold text-gray-900" id="score">0 / 160 pts</div>
+                        <div class="text-sm text-gray-600">😴 Sleep Hours: 
+                            <span id="sleep-hours" class="font-bold inline-flex items-center custom-gold text-white px-2 rounded-full">8h</span>
+                        </div>
+                    </div>
+                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="progress-bar custom-red h-2 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                Level 4: Wiki Freeze & Presentation Panic 🚀
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                The final <strong>urgence</strong>! Solve the technical and presentation crises to <strong>survivre</strong> the Wiki Freeze!
+            </p>
+        </div>
+
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8" role="alert">
+            <p class="font-bold">Last Stand: Sleep Hours (😴)</p>
+            <p class="text-sm">The <strong>Wiki Freeze</strong> is imminent. Critical mistakes cost more time! If you run out, the Wiki remains a mess and you <strong>échouer</strong> the Jamboree!</p>
+        </div>
+        
+        <section id="activity-1" class="activity-section mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">🧩 1. Flashcards: Wiki & Presentation Vocabulary</h2>
+                <p class="text-gray-600 mb-6">Memorize these words. You will need them to fix your Wiki and prepare your final presentation!</p>
+                
+                <div class="grid md:grid-cols-4 gap-6" id="flashcards-container">
+                    </div>
+                
+                <div id="flashcard-success" class="hidden mt-6 text-center">
+                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4">
+                        <span class="mr-2">✅</span>
+                        Excellent! You have mastered the Wiki vocabulary. (40 pts)
+                    </div>
+                    <button onclick="completeActivity(1)" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity" disabled id="activity-1-complete">
+                        Continue to Code Crisis →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="activity-2" class="activity-section mb-12 hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">💻 2. The Code Comma Crisis</h2>
+                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-3 mb-6">
+                    <p class="font-bold text-sm">REMINDER: NO MORE CHANGES UNLESS CRITICAL!</p>
+                </div>
+                <p class="text-gray-600 mb-6">"AHHHHHH. I touched <strong>une virgule</strong>, and the whole page is broken. You need to <strong>corriger</strong> this CSS so the buttons <strong>fonctionner</strong> again. The button results does not <strong>fonctionner</strong>."</p>
+                
+                <div id="code-crisis-container">
+                    </div>
+
+                <div id="code-feedback" class="mt-6 text-center hidden">
+                    <p class="text-xl font-semibold" id="feedback-text-code"></p>
+                </div>
+
+                <div id="code-success" class="mt-6 text-center hidden">
+                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4">
+                        <span class="mr-2">✅</span>
+                        <strong>Virgule</strong> Crisis Resolved! The CSS is fixed. (40 pts)
+                    </div>
+                    <button onclick="completeActivity(2)" class="custom-gold text-white px-6 py-3 rounded-lg hover:opacity-90 transition-opacity mt-4 w-full" id="code-crisis-complete">
+                        Continue to Server Overload →
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="activity-3" class="activity-section mb-12 hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8 fade-in" id="upload-container">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">⏰ 3. Server Overload: The Wiki Freeze</h2>
+                <p class="text-lg text-gray-600 font-semibold mb-6">"The Wiki won't upload because the <strong>serveur</strong> is overloaded, everyone is doing it at the last minute! You need to be faster than the rest! Click the upload button 10 times in under 5 seconds to <strong>télécharger</strong>."</p>
+
+                <div class="text-center mb-6">
+                    <div class="text-5xl font-bold text-custom-red mb-4" id="upload-timer">5.0s</div>
+                    <div class="text-xl font-semibold text-gray-900">Téléchargements Requis: <span id="upload-count" class="text-red-600">10</span></div>
+                </div>
+
+                <div class="text-center">
+                    <button id="upload-button" onclick="handleUploadAttempt()" class="custom-red text-white px-10 py-5 rounded-lg font-semibold text-2xl hover:scale-105 transition-transform" disabled>
+                        TÉLÉCHARGER WIKI! 🚀
+                    </button>
+                </div>
+                
+                <div id="upload-success" class="hidden mt-6 text-center">
+                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4">
+                        <span class="mr-2">🎉</span>
+                        WIKI UPLOADED! The <strong>serveur</strong> was crashing, but you made it! (40 pts)
+                    </div>
+                    <button onclick="completeActivity(3)" class="custom-red text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity" id="activity-3-complete">
+                        ✓ Continue to Menu Mayhem
+                    </button>
+                </div>
+                
+                <div id="upload-failure" class="hidden mt-6 text-center">
+                    <div class="inline-flex items-center px-4 py-2 bg-red-100 text-red-800 rounded-lg mb-4">
+                        <span class="mr-2">😩</span>
+                        SERVER CRASH! Time's up. -1.0h Sleep!
+                    </div>
+                    <button onclick="startUploadChallenge()" class="custom-red text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity">
+                        Répéter! (Try Again)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="activity-4" class="activity-section mb-12 hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8 fade-in">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">🔗 4. The Menu Mayhem</h2>
+                <p class="text-gray-600 mb-4">"Oh no, the <strong>menu</strong> stopped working hours before the Wiki Freeze! The links are broken. Click in the correct order to match the Menu Text (Left) with the Section <strong>Lien</strong> (Right)."</p>
+                
+                <div class="flex flex-col md:flex-row items-start justify-center space-y-8 md:space-y-0 md:space-x-12">
+                    
+                    <div id="menu-text-container" class="grid gap-3 w-full md:w-1/3">
+                        </div>
+
+                    <div id="match-status" class="w-full md:w-1/3 text-center self-center">
+                        <div class="text-2xl font-bold text-gray-700" id="current-match-text">Ready</div>
+                        <div class="text-6xl my-4 text-gray-400">↔️</div>
+                        <div class="text-lg font-semibold text-gray-500" id="matched-count">0/4 Matched</div>
+                    </div>
+                    
+                    <div id="menu-link-container" class="grid gap-3 w-full md:w-1/3">
+                        </div>
+
+                </div>
+                
+                <div id="menu-success" class="hidden mt-6 text-center">
+                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4">
+                        <span class="mr-2">🎉</span>
+                        MENU FIXED! The final <strong>résultat</strong> is safe. (40 pts)
+                    </div>
+                    <button id="activity-4-complete" class="custom-red text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity" onclick="completeActivity(4)">
+                        🎉 Complete Level!
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="final-results" class="activity-section mb-8 bg-white rounded-lg p-6 shadow-md text-center hidden">
+            <h2 class="text-3xl font-bold mb-4 text-green-600">🎉 Congratulations! You have <strong>survécu</strong>!</h2>
+            <p class="text-xl mb-4">"<strong>AHHHHHHHHHHHHHHH</strong>, we couldn't deliver because it was crashed. Phew, luckily they extended the delivery period!" Your final <strong>résultat</strong> is in your hands!</p>
+            <div class="custom-gold text-white p-6 rounded-lg mb-6">
+                <div class="text-2xl font-bold mb-2" id="final-score">Final Score: 0/160</div>
+                <div class="text-lg">😴 Final Sleep Hours: <span id="final-sleep-hours">8h</span></div>
+                <div class="text-sm mt-2">You survived the <strong>Wiki Freeze</strong> and the <strong>Code Comma Crisis</strong>.</div>
+            </div>
+            <button class="custom-red text-white px-8 py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition-opacity">
+                🚀 Proceed to The Grand Jamboree
+            </button>
+        </section>
+    </main>
+
+    <script>
+        // --- GLOBAL CONSTANTS ---
+        const SLEEP_HOUR_LOSS = 1.0;
+        const WIKI_UPLOAD_REQUIRED = 10;
+        const WIKI_TIMER_SECONDS = 5;
+        
+        // --- GLOBAL VARIABLES ---
+        let currentActivity = 1;
+        let score = 0;
+        let sleepHours = 8;
+        
+        // --- DATA ---
+        // Added the French words needed for the challenges: Virgule, Télécharger, Menu, Équipe, Labo Humide
+        const flashcards = [
+            { french: "Code", english: "Code" }, 
+            { french: "Serveur", english: "Server" },
+            { french: "Télécharger", english: "To upload" }, 
+            { french: "Virgule", english: "Comma" }, 
+            { french: "Corriger", english: "To correct/fix" }, 
+            { french: "Menu", english: "Menu" },
+            { french: "Lien", english: "Link" }, 
+            { french: "Présentation", english: "Presentation" },
+            { french: "Équipe", english: "Team" }, // Used in Menu Match
+            { french: "Labo Humide", english: "Wet Lab" }, // Used in Menu Match
+            { french: "Résultat", english: "Result" },
+            { french: "Critique", english: "Critical" },
+            { french: "Fonctionner", english: "To work/function" }
+        ];
+
+        const codeCrises = [
+            {
+                text: 'CRISIS: The "Résultat" button does not <strong>fonctionner</strong>. The CSS has a strange <strong>virgule</strong>.',
+                // Comma removed from code text as requested. The word 'virgule' is the clue.
+                code: `.button-results { <br> &nbsp;&nbsp; background-color: #ef4444; <br> &nbsp;&nbsp; padding: 1rem; <br> &nbsp;&nbsp; color: white<span class="code-highlight">,</span>; <br> }`,
+                correctChoice: "Remove the , after white",
+                options: ["Change #ef4444 to #fca5a5", "Remove the , after white", "Set color: black", "Add !important to color: white"]
+            }
+        ];
+
+        // Match the French words on the left with the section link (HTML page) on the right
+        const menuLinks = [
+            { text: "Équipe", link: "team.html", match: "Équipe" },
+            { text: "Labo Humide", link: "wetlab.html", match: "Labo Humide" },
+            { text: "Pratiques Humaines", link: "hp.html", match: "Pratiques Humaines" },
+            { text: "Attributions", link: "attributions.html", match: "Attributions" }
+        ];
+        
+        // --- UTILITY FUNCTIONS ---
+        
+        function updateSleepHours(loss = 0) {
+            sleepHours = Math.max(0, sleepHours - loss);
+            const hoursDisplay = document.getElementById('sleep-hours');
+            hoursDisplay.textContent = `${sleepHours.toFixed(1)}h`;
+            if (loss > 0) {
+                hoursDisplay.classList.add('sleep-pulse');
+                setTimeout(() => hoursDisplay.classList.remove('sleep-pulse'), 500);
+            }
+            if (sleepHours === 0) {
+                console.log("GAME OVER (Sleep Deprivation)");
+            }
+        }
+        
+        function updateScore(points) {
+            score += points;
+            document.getElementById('score').textContent = `${score} / 160 pts`;
+        }
+
+        function updateProgress() {
+            const progress = Math.round(((currentActivity - 1) / 4) * 100);
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+        
+        function showFinalResults() {
+            document.getElementById('final-score').textContent = `Final Score: ${score}/160`;
+            document.getElementById('final-sleep-hours').textContent = `${sleepHours.toFixed(1)}h`;
+        }
+        
+        function completeActivity(activityNumber) {
+            const currentSection = document.getElementById(`activity-${activityNumber}`);
+            currentSection.classList.add('hidden');
+            
+            if (activityNumber === 1) {
+                document.getElementById('activity-2').classList.remove('hidden');
+                currentActivity = 2;
+                loadCodeCrisis(0);
+            } else if (activityNumber === 2) {
+                // Manually moved from the Code Success button
+                document.getElementById('activity-3').classList.remove('hidden');
+                currentActivity = 3;
+                startUploadChallenge();
+            } else if (activityNumber === 3) {
+                document.getElementById('activity-4').classList.remove('hidden');
+                currentActivity = 4;
+                loadMenuChallenge();
+            } else if (activityNumber === 4) {
+                showFinalResults();
+                document.getElementById('final-results').classList.remove('hidden');
+                currentActivity = 5;
+            }
+            updateProgress();
+        }
+        
+        // --- ACTIVITY 1: FLASHCARDS ---
+        let flippedCards = new Set();
+        function generateFlashcards() {
+            const container = document.getElementById('flashcards-container');
+            container.innerHTML = '';
+            flippedCards = new Set();
+            flashcards.forEach(card => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'flip-card';
+                cardEl.innerHTML = `<div class="flip-card-inner"><div class="flip-card-front"><div class="text-2xl font-bold">${card.french}</div></div><div class="flip-card-back"><div class="text-lg font-semibold">${card.english}</div></div></div>`;
+                cardEl.addEventListener('click', () => {
+                    if (!cardEl.classList.contains('flipped')) {
+                        cardEl.classList.add('flipped');
+                        flippedCards.add(card.french);
+                        if (flippedCards.size === flashcards.length) {
+                            document.getElementById('flashcard-success').classList.remove('hidden');
+                            document.getElementById('activity-1-complete').disabled = false;
+                            updateScore(40);
+                        }
+                    }
+                });
+                container.appendChild(cardEl);
+            });
+        }
+        
+        // --- ACTIVITY 2: CODE CRISIS ---
+        function loadCodeCrisis(index) {
+            const crisis = codeCrises[index];
+            const container = document.getElementById('code-crisis-container');
+            container.innerHTML = `<p class="text-lg font-semibold text-gray-700 mb-4">${crisis.text}</p><div class="code-block mb-6">${crisis.code}</div><div id="crisis-options-code" class="grid grid-cols-2 gap-4"></div>`;
+            const optionsContainer = document.getElementById('crisis-options-code');
+            
+            // Hide the completion button until fixed
+            document.getElementById('code-crisis-complete').classList.add('hidden');
+
+            crisis.options.sort(() => Math.random() - 0.5).forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-button bg-gray-200 text-gray-800 p-4 rounded-lg font-semibold hover:bg-gray-300';
+                btn.textContent = option;
+                btn.onclick = () => handleCodeChoice(btn, option === crisis.correctChoice);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleCodeChoice(btn, isCorrect) {
+            document.querySelectorAll('#crisis-options-code button').forEach(b => b.disabled = true);
+            const feedback = document.getElementById('feedback-text-code');
+            document.getElementById('code-feedback').classList.remove('hidden');
+            if (isCorrect) {
+                btn.classList.add('correct');
+                feedback.textContent = "CORRECT! The cursed virgule is gone. The page works again.";
+                feedback.classList.add('text-green-700');
+                
+                // Show success and the completion button
+                document.getElementById('code-success').classList.remove('hidden');
+                document.getElementById('code-crisis-complete').classList.remove('hidden');
+                updateScore(40);
+            } else {
+                btn.classList.add('incorrect');
+                updateSleepHours(SLEEP_HOUR_LOSS);
+                feedback.textContent = "WRONG! You touched something else... -1.0h Sleep. Try again!";
+                feedback.classList.add('text-red-700');
+                document.querySelectorAll('#crisis-options-code button').forEach(b => {
+                    if (b.textContent === codeCrises[0].correctChoice) b.classList.add('correct');
+                });
+                setTimeout(() => loadCodeCrisis(0), 2000);
+            }
+        }
+        
+        // --- ACTIVITY 3: UPLOAD CHALLENGE (TÉLÉCHARGER) ---
+        let uploadCount = 0, timerInterval = null;
+        function startUploadChallenge() {
+            clearInterval(timerInterval);
+            uploadCount = 0;
+            let timeLeft = WIKI_TIMER_SECONDS;
+            const timerEl = document.getElementById('upload-timer');
+            const countEl = document.getElementById('upload-count');
+            const btn = document.getElementById('upload-button');
+            
+            document.getElementById('upload-failure').classList.add('hidden');
+            document.getElementById('upload-success').classList.add('hidden');
+            
+            countEl.textContent = WIKI_UPLOAD_REQUIRED;
+            timerEl.textContent = `${timeLeft.toFixed(1)}s`;
+            btn.disabled = false;
+            
+            timerInterval = setInterval(() => {
+                timeLeft -= 0.1;
+                timerEl.textContent = `${timeLeft.toFixed(1)}s`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    btn.disabled = true;
+                    if (uploadCount < WIKI_UPLOAD_REQUIRED) {
+                        document.getElementById('upload-failure').classList.remove('hidden');
+                        updateSleepHours(SLEEP_HOUR_LOSS);
+                    }
+                }
+            }, 100);
+        }
+
+        function handleUploadAttempt() {
+            uploadCount++;
+            document.getElementById('upload-count').textContent = WIKI_UPLOAD_REQUIRED - uploadCount;
+            if (uploadCount >= WIKI_UPLOAD_REQUIRED) {
+                clearInterval(timerInterval);
+                document.getElementById('upload-button').disabled = true;
+                document.getElementById('upload-success').classList.remove('hidden');
+                updateScore(40);
+            }
+        }
+        
+        // --- ACTIVITY 4: MENU MAYHEM (MENU) ---
+        let selectedLeft = null, matchedCount = 0;
+        function loadMenuChallenge() {
+            const linkContainer = document.getElementById('menu-link-container');
+            const textContainer = document.getElementById('menu-text-container');
+            linkContainer.innerHTML = '';
+            textContainer.innerHTML = '';
+            
+            // Randomize the order of the links (right side)
+            let shuffledLinks = [...menuLinks].sort(() => Math.random() - 0.5);
+            
+            // Create the Menu Text buttons (left side - French words from Flashcards)
+            menuLinks.forEach(link => {
+                 const btn = document.createElement('div');
+                 btn.className = 'bg-gray-200 p-3 rounded-lg text-center font-bold text-gray-800 cursor-pointer';
+                 btn.textContent = link.text; 
+                 btn.dataset.match = link.match; 
+                 btn.onclick = () => handleMenuClick(btn, 'left');
+                 textContainer.appendChild(btn);
+            });
+
+            // Create the Section Link buttons (right side - HTML file links)
+            shuffledLinks.forEach(link => {
+                const btn = document.createElement('div');
+                btn.className = 'bg-gray-200 p-3 rounded-lg text-center font-bold text-gray-600 cursor-pointer';
+                // Using the actual HTML link/file name for the right side
+                btn.textContent = link.link; 
+                btn.dataset.match = link.match; // Match key (French word)
+                btn.onclick = () => handleMenuClick(btn, 'right');
+                linkContainer.appendChild(btn);
+            });
+        }
+
+        function handleMenuClick(element, side) {
+            if (element.disabled) return;
+
+            if (side === 'left') {
+                if (selectedLeft) selectedLeft.classList.remove('bg-gray-700', 'text-white');
+                selectedLeft = element;
+                selectedLeft.classList.add('bg-gray-700', 'text-white');
+                document.getElementById('current-match-text').textContent = selectedLeft.textContent;
+            } else if (side === 'right' && selectedLeft) {
+                if (selectedLeft.dataset.match === element.dataset.match) {
+                    element.classList.add('bg-green-100', 'text-green-800');
+                    element.disabled = true;
+                    selectedLeft.classList.add('bg-green-100', 'text-green-800');
+                    selectedLeft.disabled = true;
+                    selectedLeft = null;
+                    matchedCount++;
+                    document.getElementById('matched-count').textContent = `${matchedCount}/4 Matched`;
+                    document.getElementById('current-match-text').textContent = "Matched!";
+                    if (matchedCount === menuLinks.length) {
+                        document.getElementById('menu-success').classList.remove('hidden');
+                        updateScore(40);
+                    }
+                } else {
+                    updateSleepHours(SLEEP_HOUR_LOSS);
+                    selectedLeft.classList.add('bg-red-100', 'text-red-800');
+                    element.classList.add('bg-red-100', 'text-red-800');
+                    document.getElementById('current-match-text').textContent = "Mismatch! Try again.";
+                    setTimeout(() => {
+                        selectedLeft.classList.remove('bg-red-100', 'text-red-800', 'bg-gray-700', 'text-white');
+                        element.classList.remove('bg-red-100', 'text-red-800');
+                        selectedLeft = null;
+                        document.getElementById('current-match-text').textContent = "Ready";
+                    }, 1000);
+                }
+            }
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            generateFlashcards();
+            updateSleepHours(0);
+            updateProgress();
+        });
+    </script>
+</body>
+</html>

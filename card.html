@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iGEM Jamboree - Professional ID Card Generator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+/* Gradientes y estilos generales */
+.gradient-bg {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+.preview-btn {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    transition: all 0.3s ease;
+}
+.preview-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(220, 38, 38, 0.3);
+}
+.download-btn {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    transition: all 0.3s ease;
+}
+.download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(220, 38, 38, 0.3);
+}
+.id-card-inner {
+    width: 70%;
+    min-height: 220px;
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 24px;
+    color: white;
+    position: relative;
+}
+.holographic-effect {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.3) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.3) 75%, rgba(255,255,255,0.1) 100%);
+    background-size: 200% 200%;
+    animation: holographic 3s ease-in-out infinite;
+    mix-blend-mode: screen;
+    opacity: 0.4;
+    pointer-events: none;
+}
+@keyframes holographic {
+    0%,100%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+}
+.card-number { font-family: 'Courier New', monospace; letter-spacing:2px; font-weight:bold; }
+.fade-in { animation: fadeIn 0.8s ease-out; }
+@keyframes fadeIn { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+</style>
+</head>
+<body class="min-h-full bg-gray-50 font-sans">
+<header class="bg-white shadow-sm border-b border-gray-100">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 gradient-bg rounded-lg flex items-center justify-center">
+                    <div class="w-6 h-6 bg-white rounded-sm"></div>
+                </div>
+                <div>
+                    <span class="text-gray-900 font-bold text-lg">iGEM Jamboree</span>
+                    <div class="text-xs text-gray-500">Professional ID Generator</div>
+                </div>
+            </div>
+            <div class="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">LEVEL 6 COMPLETE</div>
+        </div>
+    </nav>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="text-center mb-8">
+    <h1 class="text-4xl font-bold text-gray-900 mb-4">Professional iGEM ID Card Generator</h1>
+    <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-6">Create your official iGEM Jamboree identification card with French introduction phrases.</p>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Formulario -->
+<div class="bg-white rounded-xl shadow-lg p-8">
+<h2 class="text-2xl font-bold text-gray-900 mb-6">Card Information</h2>
+<form class="space-y-6">
+<div>
+<label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+<input type="text" id="name" class="form-input w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none" placeholder="Enter your full name">
+</div>
+<div>
+<label for="team" class="block text-sm font-medium text-gray-700 mb-2">Team Name</label>
+<input type="text" id="team" class="form-input w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none" placeholder="e.g., Barcelona UB">
+</div>
+<div>
+<label for="country" class="block text-sm font-medium text-gray-700 mb-2">Country (in French, e.g., 'de l'Espagne')</label>
+<input type="text" id="country" class="form-input w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none" placeholder="e.g., de l'Espagne, du Canada, de la Chine">
+</div>
+<div>
+<label for="role" class="block text-sm font-medium text-gray-700 mb-2">Role (in French, e.g., 'un ingénieur')</label>
+<select id="role" class="form-input w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none">
+    <option value="">Select your role...</option>
+    <option value="un chef d'équipe">un chef d'équipe (team leader)</option>
+    <option value="un biologiste">un biologiste (biologist)</option>
+    <option value="un ingénieur">un ingénieur (engineer)</option>
+    <option value="un designer">un designer (designer)</option>
+    <option value="un programmeur">un programmeur (programmer)</option>
+    <option value="un chercheur">un chercheur (researcher)</option>
+    <option value="un étudiant">un étudiant (student)</option>
+    <option value="un responsable de laboratoire">un responsable de laboratoire (lab manager)</option>
+    <option value="un spécialiste en communication">un spécialiste en communication (communications)</option>
+    <option value="un responsable sécurité">un responsable sécurité (safety officer)</option>
+    <option value="un responsable documentation">un responsable documentation (documentation)</option>
+</select>
+</div>
+<div>
+<label for="project" class="block text-sm font-medium text-gray-700 mb-2">Project Focus</label>
+<div>
+<label for="photo" class="block text-sm font-medium text-gray-700 mb-2">Upload Your Photo</label>
+<input type="file" id="photo" accept="image/*" class="form-input w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none" onchange="previewPhoto(event)">
+</div>
+<select id="project" class="form-input w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none">
+    <option value="">Select project focus...</option>
+    <option value="Agriculture">Agriculture</option>
+    <option value="Bioremediation">Bioremediation</option>
+    <option value="Climate Crisis">Climate Crisis</option>
+    <option value="Conservation">Conservation</option>
+    <option value="Fashion & Cosmetics">Fashion & Cosmetics</option>
+    <option value="Food & Nutrition">Food & Nutrition</option>
+    <option value="Diagnostics">Diagnostics</option>
+    <option value="Infectious Diseases">Infectious Diseases</option>
+    <option value="Oncology">Oncology</option>
+    <option value="Therapeutics">Therapeutics</option>
+    <option value="Biomanufacturing">Biomanufacturing</option>
+    <option value="Foundational Advance">Foundational Advance</option>
+    <option value="Software & AI">Software & AI</option>
+    <option value="Space">Space</option>
+    <option value="Art & Design">Art & Design</option>
+</select>
+</div>
+<div class="flex space-x-4 pt-4">
+<button type="button" onclick="generatePreview()" class="preview-btn flex-1 text-white px-6 py-3 rounded-lg font-semibold">Generate Preview</button>
+</div>
+</form>
+</div>
+
+<!-- Tarjetas visibles -->
+<div class="space-y-6">
+<div id="card-preview" class="hidden space-y-6">
+  <div class="grid grid-cols-1 gap-6">
+    <!-- Anverso -->
+    <div class="id-card-inner gradient-bg rounded-xl shadow-lg relative">
+      <div class="absolute inset-0 holographic-effect"></div>
+      <div class="flex items-start space-x-4 relative z-10">
+        <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-white bg-gray-200">
+          <img id="card-photo-front" class="w-full h-full object-cover hidden">
+          <div id="photo-placeholder-front" class="flex items-center justify-center h-full text-gray-600 text-xs">PHOTO</div>
+        </div>
+        <div class="mt-2">
+          <div id="card-name-front" class="text-xl font-bold uppercase">NOMBRE COMPLETO</div>
+          <div id="card-role-front" class="text-sm text-red-200">ROL</div>
+        </div>
+      </div>
+      <div class="mt-4 p-3 bg-white/20 rounded-lg text-center relative z-10">
+        <p id="card-introduction" class="italic">Bonjour ! Je m'appelle [Nom], [Rôle] de [Pays].</p>
+      </div>
+    </div>
+
+    <!-- Reverso -->
+    <div class="id-card-inner gradient-bg rounded-xl shadow-lg relative">
+      <div class="absolute inset-0 holographic-effect"></div>
+      <div class="relative z-10 space-y-3 h-full flex flex-col justify-between">
+        <div>
+          <p class="text-xs opacity-70">Team Name</p>
+          <p id="card-team" class="text-xl font-bold uppercase">NOMBRE DE EQUIPO</p>
+        </div>
+        <div>
+          <p class="text-xs opacity-70">Project Focus</p>
+          <p id="card-project" class="text-base font-semibold">FOCUS DEL PROYECTO</p>
+        </div>
+        <div class="flex justify-between items-end">
+          <div>
+            <p class="text-xs opacity-70">ID Card No.</p>
+            <p id="card-number" class="card-number text-base">XXXX XXXX XXXX</p>
+          </div>
+          <div class="text-right">
+            <p class="text-xs opacity-70">Location / Role</p>
+            <p id="card-country-role" class="text-sm font-semibold">PAIS / ROL</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button onclick="downloadCard('front')" class="download-btn w-full text-white px-6 py-3 rounded-lg font-semibold">Download Front</button>
+  <button onclick="downloadCard('back')" class="download-btn w-full text-white px-6 py-3 rounded-lg font-semibold">Download Back</button>
+</div>
+
+<div id="preview-placeholder" class="text-center py-12">
+  <div class="w-24 h-24 bg-gray-200 rounded-lg mx-auto mb-4 flex items-center justify-center">
+    <div class="w-12 h-12 border-4 border-gray-400 border-dashed rounded"></div>
+  </div>
+  <p class="text-gray-500">Fill out the form to generate your professional ID card</p>
+</div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+function generateRandomID(){ return Array(3).fill(0).map(()=>Math.floor(Math.random()*10000).toString().padStart(4,'0')).join(' '); }
+
+function generatePreview(){
+  const name=document.getElementById('name').value;
+  const team=document.getElementById('team').value;
+  const country=document.getElementById('country').value;
+  const roleSelect=document.getElementById('role');
+  const role=roleSelect.options[roleSelect.selectedIndex].value||'un rôle';
+  const projectSelect=document.getElementById('project');
+  const project=projectSelect.options[projectSelect.selectedIndex].value||'Focus du Projet';
+  if(!name||!team||!country||!role||!project){ alert('Please fill in all fields to generate your ID card!'); return; }
+  
+  // Front
+  document.getElementById('card-name-front').textContent=name.toUpperCase();
+  document.getElementById('card-role-front').textContent=role.replace('un ','').replace('une ','').toUpperCase();
+  document.getElementById('card-introduction').textContent=`Bonjour ! Je m'appelle ${name}, ${role} ${country}.`;
+
+  // Back
+  document.getElementById('card-team').textContent=team.toUpperCase();
+  document.getElementById('card-project').textContent=project;
+  document.getElementById('card-country-role').textContent=`${country.toUpperCase()} / ${role.replace('un ','').replace('une ','').toUpperCase()}`;
+  document.getElementById('card-number').textContent=generateRandomID();
+
+  document.getElementById('preview-placeholder').classList.add('hidden');
+  document.getElementById('card-preview').classList.remove('hidden');
+  document.getElementById('card-preview').classList.add('fade-in');
+}
+
+function downloadCard(face){
+  const element = document.getElementById('card-preview').querySelectorAll('.id-card-inner')[face==='front'?0:1];
+  html2canvas(element,{scale:3,useCORS:true,allowTaint:true}).then(canvas=>{
+    const name=document.getElementById('name').value.replace(/\s+/g,'_')||'iGEM';
+    const link=document.createElement('a');
+    link.download=`${name}_ID_Card_${face}.png`;
+    link.href=canvas.toDataURL('image/png'); link.click();
+  });
+}
+
+function previewPhoto(event){
+  const file=event.target.files[0]; if(!file) return;
+  const img=document.getElementById('card-photo-front');
+  const placeholder=document.getElementById('photo-placeholder-front');
+  const reader=new FileReader(); reader.onload=e=>{ img.src=e.target.result; img.classList.remove('hidden'); placeholder.classList.add('hidden'); };
+  reader.readAsDataURL(file);
+}
+</script>
+</body>
+</html>

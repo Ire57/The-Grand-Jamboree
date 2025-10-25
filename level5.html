@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 5: The Jamboree! - Le Grand Jamboree</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        /* Level 1 Theme (RED) - Replaced Purple/Jamboree */
+        .custom-red { /* RENAMED FROM custom-purple */
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        }
+        
+        .text-custom-red { /* RENAMED FROM text-custom-purple */
+            color: #dc2626;
+        }
+        
+        .custom-gold {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        .custom-jamboree { /* OVERWRITING custom-jamboree with custom-red */
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        }
+        
+        .custom-celebration {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 25%, #45b7d1 50%, #96ceb4 75%, #feca57 100%);
+        }
+        
+        .flip-card {
+            perspective: 1000px;
+            width: 100%;
+            height: 160px;
+        }
+        
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .flip-card-front {
+            /* Changed from pink/maroon to red theme */
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+        }
+        
+        .flip-card-back {
+            background: white;
+            color: #374151;
+            /* Changed border from pink/maroon to red */
+            border: 2px solid #dc2626; 
+            transform: rotateY(180deg);
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f59e0b;
+            animation: confetti-fall 3s linear forwards;
+            z-index: 1000;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .sparkle {
+            animation: sparkle 2s ease-in-out infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .applause-animation {
+            animation: applause 0.5s ease-in-out 3;
+        }
+        
+        @keyframes applause {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .audio-button {
+            transition: all 0.3s ease;
+        }
+        
+        .audio-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .audio-button.playing {
+            animation: audio-pulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes audio-pulse {
+            /* Changed from pink/maroon to red */
+            0%, 100% { background-color: #dc2626; } 
+            50% { background-color: #b91c1c; }
+        }
+        
+        .dialogue-bubble {
+            position: relative;
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dialogue-bubble.left::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 10px solid white;
+        }
+        
+        .dialogue-bubble.right::before {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 10px solid white;
+        }
+        
+        .quiz-option {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .quiz-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .quiz-option.correct {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            animation: correctAnswer 0.5s ease;
+        }
+        
+        .quiz-option.incorrect {
+            /* Already correct from Level 1: Red gradient */
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); 
+            color: white;
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes correctAnswer {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        .celebration-message {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 25%, #45b7d1 50%, #96ceb4 75%, #feca57 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            animation: celebration-glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes celebration-glow {
+            from { box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); }
+            to { box-shadow: 0 12px 24px rgba(255, 107, 107, 0.4); }
+        }
+        
+        .certificate {
+            background: linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%);
+            border: 4px solid #d97706;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-animation {
+            animation: logo-bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes logo-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="min-h-full bg-gray-50 font-sans">
+    <header class="bg-white shadow-sm border-b border-gray-100">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html"><div class="flex items-center space-x-2">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center">
+                        <img src="FROG skippit RED.png" alt="igem barcelona-ub logo" class="w-full h-full object-cover p-2">
+                    </div>
+                    <span class="text-custom-red font-bold text-xl">LE GRAND JAMBOREE</span>
+                </div>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <div class="text-sm text-gray-600">Level 5 of 5 - FINAL LEVEL!</div>
+                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="progress-bar custom-celebration h-2 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="text-center mb-6 sm:mb-8">
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 px-2">
+                Level 5: The Jamboree! 🎤🏆
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto px-4 mb-4">
+                Welcome to the final level! Get ready to present your iGEM project in French, meet other teams, and celebrate your success at the Jamboree!
+            </p>
+            <div class="bg-gradient-to-r from-red-100 to-red-100 rounded-lg p-4 max-w-2xl mx-auto">
+                <p class="text-sm text-gray-700">
+                    🎯 Practice presentation, social, and celebration vocabulary in French — all while having fun!
+                </p>
+            </div>
+        </div>
+
+        <section id="activity-1" class="activity-section mb-8 sm:mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">🎤 1. Present Your Project & Navigate!</h2>
+                <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Learn essential presentation and navigation phrases for the Jamboree! Click cards to flip them.</p>
+                
+                <div class="max-w-4xl mx-auto">
+                    <div class="text-center mb-6">
+                        <div class="text-lg text-gray-700">
+                            Phrases mastered: <span id="presentation-learned" class="font-bold text-red-600">0</span>/13
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="presentation-flashcards">
+                        </div>
+                </div>
+                
+                <div id="presentation-success" class="hidden mt-6 text-center">
+                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4 applause-animation">
+                        <span class="mr-2">👏</span>
+                        Virtual Applause! You're ready to present!
+                    </div>
+                    <button onclick="completeActivity(1)" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
+                        Continue to Directions Match →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="activity-2" class="activity-section mb-8 sm:mb-12 hidden">
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">🗺️ 2. Lost in Paris! (Asking for Directions)</h2>
+                <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">You're lost near the venue! Match the French direction phrase with its English meaning to find your way.</p>
+                <style>
+                    .contenedor {
+                        display: flex;
+                        justify-content: center;
+                    }
+                </style>
+
+                <div class="contenedor">
+                    <img src="lost.png" alt="iGemers Lost in Paris" width="80%">
+                </div>
+                <div class="max-w-3xl mx-auto">
+                    <div class="text-center mb-6">
+                        <div class="text-lg text-gray-700">
+                            Matches found: <span id="audio-matches" class="font-bold text-red-600">0</span>/5
+                        </div>
+                    </div>
+                    
+                    <div id="audio-matching-area">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4">🇫🇷 French Phrases:</h3>
+                                <div class="space-y-3" id="audio-buttons">
+                                    </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4">🇬🇧 English Meanings:</h3>
+                                <div class="space-y-3" id="english-options">
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="audio-success" class="hidden mt-6 text-center">
+                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4 sparkle">
+                        <span class="mr-2">🗺️</span>
+                        Direction Pro badge earned! You found the Jamboree!
+                    </div>
+                    <button onclick="completeActivity(2)" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
+                        Continue to Poster Session →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="activity-3" class="activity-section mb-8 sm:mb-12 hidden">
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">💬 3. At the Poster Session</h2>
+                <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Complete this conversation between two iGEM team members! You might have to remember words from other levels... ;)</p>
+                
+                <div class="max-w-2xl mx-auto">
+                    <div class="bg-gradient-to-r from-blue-50 to-red-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4 text-center">🧬 Poster Session Conversation</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="dialogue-bubble left bg-red-100">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-2">E</div>
+                                    <span class="font-semibold text-gray-800">Emma</span>
+                                </div>
+                                <p class="text-gray-700">Bonjour ! Je m'appelle Emma. Et toi ?</p>
+                            </div>
+                            
+                            <div class="dialogue-bubble right bg-blue-100">
+                                <div class="flex items-center mb-2 justify-end">
+                                    <span class="font-semibold text-gray-800 mr-2">Gaia</span>
+                                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">L</div>
+                                </div>
+                                <p class="text-gray-700">
+                                    Je m'appelle Gaia. 
+                                    <select class="dialogue-blank mx-1 px-2 py-1 border-2 border-gray-300 rounded" data-correct="0">
+                                        <option value="">___</option>
+                                        <option value="1">On a perdu la carte et la tête</option>
+                                        <option value="0">Nous sommes l'équipe</option>
+                                        <option value="2">J'ai le cerveau en mode "erreur 404"</option>
+                                    </select>
+                                    Barcelona UB.
+                                </p>
+                            </div>
+                            
+                            <div class="dialogue-bubble left bg-red-100">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-2">E</div>
+                                    <span class="font-semibold text-gray-800">Emma</span>
+                                </div>
+                                <p class="text-gray-700">Super ! What is your project about?</p>
+                            </div>
+                            
+                            <div class="dialogue-bubble right bg-blue-100">
+                                <div class="flex items-center mb-2 justify-end">
+                                    <span class="font-semibold text-gray-800 mr-2">Gaia</span>
+                                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">L</div>
+                                </div>
+                                <p class="text-gray-700">
+                                    <select class="dialogue-blank mx-1 px-2 py-1 border-2 border-gray-300 rounded" data-correct="0">
+                                        <option value="">___</option>
+                                        <option value="1">Je vois des licornes qui demandent l'heure</option>
+                                        <option value="2">C'est du charabia pour moi</option>
+                                        <option value="0">Notre projet parle de</option>
+                                    </select> <a href="https://2025.igem.wiki/barcelona-ub/description">Revolutionizing Gene Regulation</a>.
+                                    
+                                </p>
+                            </div>
+                            
+                            <div class="dialogue-bubble left bg-red-100">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-sm font-bold mr-2">E</div>
+                                    <span class="font-semibold text-gray-800">Emma</span>
+                                </div>
+                                <p class="text-gray-700">Fantastique ! Bonne chance for the presentation !</p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-6">
+                            <button onclick="checkDialogue()" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                                Check Conversation ✓
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="dialogue-success" class="hidden mt-6 text-center">
+                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4">
+                        <span class="mr-2">💬</span>
+                        Well done! Perfect conversation skills!
+                    </div>
+                    <button onclick="completeActivity(3)" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
+                        Continue to Jamboree Survival →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="activity-4" class="activity-section mb-8 sm:mb-12 hidden">
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">⚡ 4. Jamboree Survival Quiz</h2>
+                <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Quick! How do you respond in these Jamboree situations?</p>
+                
+                <div class="max-w-2xl mx-auto">
+                    <div class="text-center mb-6">
+                        <div class="text-lg text-gray-700">
+                            Question <span id="quiz-current">1</span> of <span id="quiz-total">4</span>
+                        </div>
+                    </div>
+                    
+                    <div id="quiz-question" class="bg-gray-50 rounded-lg p-6 mb-4">
+                        </div>
+                </div>
+                
+                <div id="quiz-success" class="hidden mt-6 text-center">
+                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4 pulse-animation">
+                        <span class="mr-2">💬</span>
+                        Networking Pro badge earned! You're ready for any Jamboree situation!
+                    </div>
+                    <button onclick="completeActivity(4)" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
+                        Continue to Celebration Creator →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="activity-5" class="activity-section mb-8 sm:mb-12 hidden">
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">🎉 5. Celebration Creator</h2>
+                <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Create your team's celebration message in French!</p>
+                
+                <div class="max-w-2xl mx-auto">
+                    <div class="bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-lg p-6 mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">🏆 Your Team Celebration Message</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label for="team-name" class="block text-sm font-medium text-gray-700 mb-1">Team Name:</label>
+                                <input type="text" id="team-name" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-yellow-500 focus:outline-none" placeholder="e.g., Barcelona UB">
+                            </div>
+                            
+                            <div>
+                                <label for="project-topic" class="block text-sm font-medium text-gray-700 mb-1">Choose Your Project Topic:</label>
+                                <input type="text" id="project-topic" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-yellow-500 focus:outline-none" placeholder="e.g., Revolutionizing Gene Regulation">
+                            </div>
+                            
+                            <div>
+                                <label for="team-feeling" class="block text-sm font-medium text-gray-700 mb-1">How does your team feel?</label>
+                                <select id="team-feeling" class="w-full px-3 py-2 border-2 border-gray-300 rounded-lg focus:border-yellow-500 focus:outline-none">
+                                    <option value="">Choose your feeling...</option>
+                                    <option value="très fiers">très fiers (very proud)</option>
+                                    <option value="super heureux">super heureux (super happy)</option>
+                                    <option value="incroyablement excités">incroyablement excités (incredibly excited)</option>
+                                    <option value="absolument ravis">absolument ravis (absolutely delighted)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-6">
+                            <button onclick="generateCelebration()" class="custom-gold text-white px-6 py-3 rounded-lg hover:opacity-90 transition-opacity font-semibold">
+                                Create Celebration Message! 🎊
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="celebration-result" class="hidden">
+                        </div>
+                </div>
+                
+                <div id="celebration-success" class="hidden mt-6 text-center">
+                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4">
+                        <span class="mr-2">🎉</span>
+                        Magnificent! Your celebration message is perfect!
+                    </div>
+                    <button onclick="completeActivity(5)" class="custom-celebration text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
+                        Complete The Jamboree! 🏆
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="completion-screen" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 text-center">
+                <div class="mb-6">
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 custom-celebration rounded-full flex items-center justify-center mx-auto mb-4 pulse-animation">
+                        <span class="text-white text-3xl sm:text-4xl">🎊</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Congratulations! You finished Level 5 – The Jamboree!</h2>
+                    <p class="text-xl sm:text-2xl text-gray-600 mb-4 sm:mb-6 px-2">You can now greet, present, and celebrate in French like a pro!</p>
+                    <p class="text-lg text-gray-700 mb-6 sm:mb-8 px-2">You're ready to represent your team at any international iGEM event! 🌍</p>
+                </div>
+                
+                <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 border-2 border-yellow-300 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-800 mb-2">Final Code Unlocked:</h3>
+                    <div class="text-2xl sm:text-3xl font-bold text-custom-red">🧬 BONJOURIGEM</div>
+                    <div class="text-sm text-gray-600 mt-2">You are now a French iGEM champion!</div>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                    <div class="bg-gradient-to-r from-red-100 to-red-200 border-2 border-red-300 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Presentation Skills:</h3>
+                        <div class="text-3xl font-bold text-red-600">Expert</div>
+                        <div class="text-sm text-gray-600">Ready for any Jamboree!</div>
+                    </div>
+                    <div class="bg-gradient-to-r from-red-100 to-red-200 border-2 border-red-300 rounded-lg p-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">French Phrases:</h3>
+                        <div class="text-3xl font-bold text-red-600">50+</div>
+                        <div class="text-sm text-gray-600">Mastered for networking</div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+                    <button onclick="viewCertificate()" class="custom-gold text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold hover:opacity-90 transition-opacity text-base sm:text-lg">
+                        🎓 View Certificate
+                    </button>
+                    <button onclick="reviewVocabulary()" class="border-2 border-red-600 text-red-600 px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors text-sm sm:text-base">
+                        📖 Review Vocabulary
+                    </button>
+                    <button onclick="playAgain()" class="border-2 border-red-600 text-red-600 px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors text-sm sm:text-base">
+                        🏁 Play Again
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <div id="certificate-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div class="certificate max-w-2xl w-full">
+                <div class="text-center">
+                    <div class="flex justify-center items-center mb-4">
+                        <div class="w-16 h-16 custom-celebration rounded-full flex items-center justify-center mr-4 logo-animation">
+                            <span class="text-white text-2xl">🧬</span>
+                        </div>
+                        <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center logo-animation">
+                            <span class="text-white text-xl font-bold">UB</span>
+                        </div>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Certificate of Achievement</h2>
+                    <p class="text-lg text-gray-700 mb-4">This certifies that</p>
+                    <div class="text-2xl font-bold text-custom-red mb-4" id="certificate-name">French iGEM Champion</div>
+                    <p class="text-base text-gray-700 mb-6">has successfully completed all 5 levels of Le Grand Jamboree French learning game and is now qualified to represent their iGEM team at international events in French!</p>
+                    <div class="text-sm text-gray-600 mb-4">Powered by iGEM UB & Skippit</div>
+                    <button onclick="closeCertificate()" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                        Close Certificate
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentActivity = 1;
+        let completedActivities = 0;
+        
+        // Vocabulary data - NOW INCLUDES ALL 13 PHRASES (PRESENTATION + DIRECTIONS)
+        const presentationPhrases = [
+            { french: "Bonjour à tous !", english: "Hello everyone!", category: "greeting" },
+            { french: "Nous sommes l'équipe Barcelona UB", english: "We are Team Barcelona UB", category: "introduction" },
+            { french: "Notre projet parle de...", english: "Our project is about...", category: "presentation" },
+            { french: "Nous avons travaillé sur...", english: "We worked on...", category: "presentation" },
+            { french: "Notre objectif est de...", english: "Our goal is to...", category: "presentation" },
+            { french: "Voici notre wiki", english: "Here is our wiki", category: "presentation" },
+            { french: "Merci beaucoup !", english: "Thank you very much!", category: "thanks" },
+            { french: "Bonne chance !", english: "Good luck!", category: "social" },
+            // NEW DIRECTION PHRASES ADDED HERE FOR FLASHCARDS
+            { french: "Excusez-moi, je suis perdu(e).", english: "Excuse me, I am lost.", category: "direction" },
+            { french: "Où est le Palais des Congrès ?", english: "Where is the Palais des Congrès (the venue)?", category: "direction" },
+            { french: "C'est loin d'ici ?", english: "Is it far from here?", category: "direction" },
+            { french: "Tournez à droite.", english: "Turn right.", category: "direction" },
+            { french: "Tout droit.", english: "Straight ahead.", category: "direction" }
+        ];
+        
+        // Direction phrases kept separate for the Activity 2 matching game logic only
+        const directionsPhrases = [
+            { french: "Excusez-moi, je suis perdu(e).", english: "Excuse me, I am lost." },
+            { french: "Où est le Palais des Congrès ?", english: "Where is the Palais des Congrès (the venue)?" },
+            { french: "C'est loin d'ici ?", english: "Is it far from here?" },
+            { french: "Tournez à droite.", english: "Turn right." },
+            { french: "Tout droit.", english: "Straight ahead." }
+        ];
+        
+        const quizQuestions = [
+            {
+                situation: "Someone says 'Bonne chance !' to you before your presentation.",
+                question: "How do you respond?",
+                options: ["Merci !", "Au revoir !", "Bonjour !"],
+                correct: 0
+            },
+            {
+                situation: "A judge says 'Félicitations !' after your presentation.",
+                question: "What's the best response?",
+                options: ["Bonne nuit !", "Merci beaucoup !", "Excusez-moi !"],
+                correct: 1
+            },
+            {
+                situation: "You want to introduce your team to another team.",
+                question: "How do you start?",
+                options: ["Au revoir !", "Nous sommes l'équipe...", "Ça va mal !"],
+                correct: 1
+            },
+            {
+                situation: "Someone asks about your project topic.",
+                question: "How do you begin your answer?",
+                options: ["Notre projet parle de...", "Je ne sais pas", "C'est fini !"],
+                correct: 0
+            }
+        ];
+        
+        // Activity 1: Presentation Flashcards
+        let presentationLearned = 0;
+        
+        function initPresentationFlashcards() {
+            const container = document.getElementById('presentation-flashcards');
+            container.innerHTML = '';
+            
+            presentationPhrases.forEach((phrase, index) => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'flip-card';
+                cardDiv.innerHTML = `
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="text-base font-bold mb-2">${phrase.french}</div>
+                            <div class="text-xs text-red-200">Click to reveal!</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div class="text-sm font-semibold text-red-700 mb-2">${phrase.english}</div>
+                            <div class="text-xs text-gray-600 bg-gray-100 rounded px-2 py-1">${phrase.french}</div>
+                        </div>
+                    </div>
+                `;
+                
+                cardDiv.onclick = () => flipPresentationCard(cardDiv, index);
+                container.appendChild(cardDiv);
+            });
+        }
+        
+        function flipPresentationCard(cardElement, index) {
+            if (!cardElement.classList.contains('flipped')) {
+                cardElement.classList.add('flipped');
+                presentationLearned++;
+                document.getElementById('presentation-learned').textContent = presentationLearned;
+                
+                // Success check uses the new combined array length (13)
+                if (presentationLearned === presentationPhrases.length) {
+                    setTimeout(() => {
+                        document.getElementById('presentation-success').classList.remove('hidden');
+                    }, 500);
+                }
+            }
+        }
+        
+        // Activity 2: Directions Matching (Replaced Audio Matching)
+        let directionMatches = 0;
+        let selectedFrench = null;
+        let selectedEnglish = null;
+        
+        function initDirectionsMatching() { // Renamed from initAudioMatching
+            const frenchContainer = document.getElementById('audio-buttons');
+            const englishContainer = document.getElementById('english-options');
+            
+            frenchContainer.innerHTML = '';
+            englishContainer.innerHTML = '';
+            
+            // Create French buttons (Text buttons)
+            directionsPhrases.forEach((phrase, index) => {
+                const frenchButton = document.createElement('button');
+                frenchButton.className = 'w-full bg-red-500 text-white p-3 rounded-lg hover:bg-red-600 transition-colors text-left font-semibold';
+                frenchButton.textContent = phrase.french;
+                frenchButton.setAttribute('data-french', phrase.french);
+                frenchButton.onclick = () => selectFrench(phrase.french, frenchButton);
+                frenchContainer.appendChild(frenchButton);
+            });
+            
+            // Create English options (shuffled)
+            const shuffledEnglish = [...directionsPhrases].sort(() => Math.random() - 0.5);
+            shuffledEnglish.forEach((phrase, index) => {
+                const englishButton = document.createElement('button');
+                englishButton.className = 'w-full bg-gray-100 border-2 border-gray-300 p-3 rounded-lg hover:bg-gray-200 transition-colors text-left';
+                englishButton.textContent = phrase.english;
+                englishButton.onclick = () => selectEnglish(phrase.english, englishButton);
+                englishContainer.appendChild(englishButton);
+            });
+
+            directionMatches = 0;
+            document.getElementById('audio-matches').textContent = directionMatches;
+        }
+        
+        function selectFrench(french, button) {
+            // Reset previous French selections
+            document.querySelectorAll('#audio-buttons button').forEach(btn => {
+                btn.classList.remove('bg-blue-200', 'border-blue-500', 'text-gray-900');
+                if (!btn.classList.contains('bg-green-500')) {
+                    btn.classList.add('bg-red-500', 'text-white');
+                }
+            });
+            
+            // Mark current as selected
+            button.classList.remove('bg-red-500', 'text-white');
+            button.classList.add('bg-blue-200', 'border-blue-500', 'text-gray-900');
+            
+            selectedFrench = french;
+            checkMatch();
+        }
+        
+        function selectEnglish(english, button) {
+            // Reset previous English selections
+            document.querySelectorAll('#english-options button').forEach(btn => {
+                btn.classList.remove('bg-blue-200', 'border-blue-500', 'text-gray-900');
+                if (!btn.classList.contains('bg-green-200')) {
+                    btn.classList.add('bg-gray-100', 'border-gray-300');
+                }
+            });
+            
+            // Mark current as selected
+            button.classList.remove('bg-gray-100', 'border-gray-300');
+            button.classList.add('bg-blue-200', 'border-blue-500', 'text-gray-900');
+            
+            selectedEnglish = english;
+            checkMatch();
+        }
+        
+        function checkMatch() {
+            if (selectedFrench && selectedEnglish) {
+                const correctPair = directionsPhrases.find(p => p.french === selectedFrench);
+                
+                const frenchButton = document.querySelector(`#audio-buttons button[data-french="${selectedFrench}"]`);
+                const englishButton = document.querySelector('#english-options button.bg-blue-200');
+
+                if (correctPair && correctPair.english === selectedEnglish) {
+                    // Correct match
+                    directionMatches++;
+                    document.getElementById('audio-matches').textContent = directionMatches;
+                    
+                    // Mark as matched
+                    frenchButton.classList.remove('bg-blue-200', 'border-blue-500', 'text-gray-900', 'bg-red-500');
+                    frenchButton.classList.add('bg-green-500', 'text-white');
+                    frenchButton.style.pointerEvents = 'none';
+                    
+                    englishButton.classList.remove('bg-blue-200', 'border-blue-500', 'bg-gray-100', 'border-gray-300', 'text-gray-900');
+                    englishButton.classList.add('bg-green-200', 'border-green-500', 'text-gray-900');
+                    englishButton.style.pointerEvents = 'none';
+
+                    if (directionMatches === directionsPhrases.length) {
+                        setTimeout(() => {
+                            document.getElementById('audio-success').classList.remove('hidden');
+                        }, 500);
+                    }
+                } else {
+                    // Mismatch: Add quick red flash and reset
+                    if (frenchButton) {
+                        frenchButton.classList.remove('bg-blue-200', 'border-blue-500', 'text-gray-900');
+                        frenchButton.classList.add('bg-red-200', 'border-red-500', 'text-gray-900');
+                    }
+                    if (englishButton) {
+                        englishButton.classList.remove('bg-blue-200', 'border-blue-500', 'text-gray-900');
+                        englishButton.classList.add('bg-red-200', 'border-red-500', 'text-gray-900');
+                    }
+
+                    setTimeout(() => {
+                        if (frenchButton && !frenchButton.classList.contains('bg-green-500')) {
+                             frenchButton.classList.remove('bg-red-200', 'border-red-500', 'text-gray-900');
+                             frenchButton.classList.add('bg-red-500', 'text-white');
+                        }
+                        if (englishButton && !englishButton.classList.contains('bg-green-200')) {
+                            englishButton.classList.remove('bg-red-200', 'border-red-500', 'text-gray-900');
+                            englishButton.classList.add('bg-gray-100', 'border-gray-300');
+                        }
+                    }, 500);
+                }
+                
+                // Reset selections
+                selectedFrench = null;
+                selectedEnglish = null;
+            }
+        }
+        
+        // Activity 3: Dialogue
+        function checkDialogue() {
+            const blanks = document.querySelectorAll('.dialogue-blank');
+            let allCorrect = true;
+            
+            blanks.forEach(blank => {
+                const selected = parseInt(blank.value);
+                const correct = parseInt(blank.dataset.correct);
+                
+                if (selected === correct) {
+                    blank.classList.remove('border-red-500', 'bg-red-50');
+                    blank.classList.add('border-green-500', 'bg-green-50');
+                } else {
+                    blank.classList.remove('border-green-500', 'bg-green-50');
+                    blank.classList.add('border-red-500', 'bg-red-50');
+                    allCorrect = false;
+                }
+            });
+            
+            if (allCorrect) {
+                document.getElementById('dialogue-success').classList.remove('hidden');
+            }
+        }
+        
+        // Activity 4: Quiz
+        let currentQuizQ = 0;
+        
+        function initQuiz() {
+            document.getElementById('quiz-total').textContent = quizQuestions.length;
+            showQuizQuestion(0);
+        }
+        
+        function showQuizQuestion(index) {
+            if (index >= quizQuestions.length) {
+                document.getElementById('quiz-success').classList.remove('hidden');
+                return;
+            }
+            
+            const question = quizQuestions[index];
+            document.getElementById('quiz-current').textContent = index + 1;
+            
+            const container = document.getElementById('quiz-question');
+            container.innerHTML = `
+                <div class="text-center mb-4">
+                    <div class="text-4xl mb-2">🎤</div>
+                    <div class="text-base font-semibold text-gray-800 mb-2">Situation:</div>
+                    <div class="text-sm text-gray-700 mb-4">${question.situation}</div>
+                    <div class="text-base font-semibold text-gray-800">${question.question}</div>
+                </div>
+                
+                <div class="space-y-3">
+                    ${question.options.map((option, optIndex) => `
+                        <div class="quiz-option bg-white border-2 border-gray-300 rounded-lg p-3 text-center" onclick="selectQuizAnswer(${optIndex}, ${question.correct})">
+                            ${option}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        function selectQuizAnswer(selected, correct) {
+            const options = document.querySelectorAll('.quiz-option');
+            
+            options.forEach((option, index) => {
+                option.style.pointerEvents = 'none';
+                if (index === correct) {
+                    option.classList.add('correct');
+                } else if (index === selected && index !== correct) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            setTimeout(() => {
+                currentQuizQ++;
+                showQuizQuestion(currentQuizQ);
+            }, 2000);
+        }
+        
+        // Activity 5: Celebration Creator
+        function generateCelebration() {
+            const teamName = document.getElementById('team-name').value;
+            // Corregido: Se añade la recuperación del valor del tema del proyecto.
+            const projectTopic = document.getElementById('project-topic').value; 
+            const teamFeeling = document.getElementById('team-feeling').value;
+            
+            if (!teamName || !projectTopic || !teamFeeling) {
+                alert('Please fill in all fields to create your celebration message!');
+                return;
+            }
+            
+            const celebrationContainer = document.getElementById('celebration-result');
+            celebrationContainer.innerHTML = `
+                <div class="celebration-message">
+                    <div class="text-3xl mb-4">🎉</div>
+                    <h3 class="text-xl font-bold mb-4">Félicitations !</h3>
+                    <div class="text-left space-y-2">
+                        <p><strong>Nous sommes l'équipe ${teamName}.</strong></p>
+                        <p>Nous avons travaillé sur ${projectTopic}.</p>
+                        <p>Nous sommes ${teamFeeling} de notre projet.</p>
+                        <p>Merci à tous et à bientôt !</p>
+                    </div>
+                    <div class="mt-4 text-2xl">🏆✨🎊</div>
+                </div>
+            `;
+            
+            celebrationContainer.classList.remove('hidden');
+            document.getElementById('celebration-success').classList.remove('hidden');
+            createConfetti();
+        }
+        
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = ['#f59e0b', '#dc2626', '#10b981', '#3b82f6', '#8b5cf6'][Math.floor(Math.random() * 5)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+        
+        // Activity completion
+        function completeActivity(activityNumber) {
+            completedActivities++;
+            updateProgress();
+            
+            if (activityNumber < 5) {
+                document.getElementById(`activity-${activityNumber}`).classList.add('hidden');
+                document.getElementById(`activity-${activityNumber + 1}`).classList.remove('hidden');
+                document.getElementById(`activity-${activityNumber + 1}`).classList.add('fade-in');
+                currentActivity = activityNumber + 1;
+                
+                // Initialize next activity
+                if (activityNumber + 1 === 2) initDirectionsMatching();
+                if (activityNumber + 1 === 4) initQuiz();
+            } else {
+                document.getElementById(`activity-${activityNumber}`).classList.add('hidden');
+                document.getElementById('completion-screen').classList.remove('hidden');
+                document.getElementById('completion-screen').classList.add('fade-in');
+                createConfetti();
+            }
+        }
+        
+        function updateProgress() {
+            const progress = (completedActivities / 5) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+        
+        function viewCertificate() {
+            document.getElementById('certificate-modal').classList.remove('hidden');
+        }
+        
+        function closeCertificate() {
+            document.getElementById('certificate-modal').classList.add('hidden');
+        }
+        
+        function reviewVocabulary() {
+            let vocabList = "🎤 JAMBOREE FRENCH VOCABULARY MASTERED:\n\n";
+            
+            vocabList += "👋 GREETINGS & INTRODUCTIONS:\n";
+            vocabList += "• Bonjour à tous ! = Hello everyone!\n";
+            vocabList += "• Nous sommes l'équipe... = We are team...\n";
+            vocabList += "• Enchanté(e) ! = Nice to meet you!\n";
+            vocabList += "• Merci beaucoup ! = Thank you very much!\n";
+            vocabList += "• Bonne chance ! = Good luck!\n\n";
+            
+            vocabList += "🗺️ DIRECTIONS & NAVIGATION:\n";
+            vocabList += "• Excusez-moi, je suis perdu(e). = Excuse me, I am lost.\n";
+            vocabList += "• Où est le Palais des Congrès ? = Where is the Palais des Congrès (the venue)?\n";
+            vocabList += "• C'est loin d'ici ? = Is it far from here?\n";
+            vocabList += "• Tournez à droite. = Turn right.\n";
+            vocabList += "• Tout droit. = Straight ahead.\n\n";
+            
+            vocabList += "🎤 PRESENTATION PHRASES:\n";
+            vocabList += "• Notre projet parle de... = Our project is about...\n";
+            vocabList += "• Nous avons travaillé sur... = We worked on...\n";
+            vocabList += "• Notre objectif est de... = Our goal is to...\n";
+            vocabList += "• Voici notre wiki. = Here is our wiki.\n\n";
+            
+            vocabList += "🎉 CELEBRATION WORDS:\n";
+            vocabList += "• Félicitations ! = Congratulations!\n";
+            vocabList += "• On l'a fait ! = We did it!\n";
+            vocabList += "• C'était incroyable ! = That was amazing!\n";
+            vocabList += "• Faisons une photo ! = Let's take a photo!\n";
+            vocabList += "• À l'année prochaine ! = See you next year!\n\n";
+            
+            vocabList += "🏆 You're ready to represent your team at any international iGEM event!";
+            alert(vocabList);
+        }
+        
+        function playAgain() {
+            if (confirm('Are you sure you want to restart the entire game? This will reset all your progress.')) {
+                location.reload();
+            }
+        }
+        
+        // Initialize the game when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initPresentationFlashcards();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'993fd69fb2cdaa4b',t:'MTc2MTM3NTY0MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

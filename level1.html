@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 1: Création d'équipe - Le Grand Jamboree</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .custom-red {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        }
+        
+        .text-custom-red {
+            color: #dc2626;
+        }
+        
+        .custom-gold {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        .flip-card {
+            perspective: 1000px;
+            width: 100%;
+            height: 200px;
+        }
+        
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .flip-card-front {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            color: white;
+        }
+        
+        .flip-card-back {
+            background: white;
+            color: #374151;
+            border: 2px solid #dc2626;
+            transform: rotateY(180deg);
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease;
+        }
+        
+        .drag-item {
+            cursor: grab;
+            transition: all 0.3s ease;
+        }
+        
+        .drag-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .drag-item.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+        
+        .drop-zone {
+            min-height: 60px;
+            transition: all 0.3s ease;
+        }
+        
+        .drop-zone.drag-over {
+            background-color: #fef3c7;
+            border-color: #f59e0b;
+            transform: scale(1.02);
+        }
+        
+        .drop-zone.correct {
+            background-color: #d1fae5;
+            border-color: #10b981;
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f59e0b;
+            animation: confetti-fall 3s linear forwards;
+            z-index: 1000;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse-success {
+            animation: pulseSuccess 0.6s ease;
+        }
+        
+        @keyframes pulseSuccess {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body class="min-h-full bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-100">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html"><div class="flex items-center space-x-2">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center">
+                        <img src="FROG skippit RED.png" alt="igem barcelona-ub logo" class="w-full h-full object-cover p-2">
+                    </div>
+                    <span class="text-custom-red font-bold text-xl">LE GRAND JAMBOREE</span>
+                </div>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <div class="text-sm text-gray-600">Level 1 of 5</div>
+                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                        <div id="progress-bar" class="progress-bar bg-red-600 h-2 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Level Title -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                Level 1: Création d'équipe 💬
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Learn how to introduce yourself in French and meet your iGEM teammates!
+            </p>
+        </div>
+
+        <!-- Activity 1: Flashcards -->
+        <section id="activity-1" class="activity-section mb-12">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">🧩 1. Flashcards: Introductions & Greetings</h2>
+                <p class="text-gray-600 mb-6">Click each card to see the English translation</p>
+                
+                <div class="grid md:grid-cols-3 gap-6" id="flashcards-container">
+                    <!-- Flashcards will be generated here -->
+                </div>
+                
+                <div id="flashcard-success" class="hidden mt-6 text-center">
+                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4">
+                        <span class="mr-2">✅</span>
+                        Well done! You've reviewed all the cards!
+                    </div>
+                    <button onclick="completeActivity(1)" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
+                        Continue to Matching Game →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity 2: Matching Game -->
+        <section id="activity-2" class="activity-section mb-12 hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">🧠 2. Matching Game: Who Does What?</h2>
+                <p class="text-gray-600 mb-6">Drag each French role to the correct activity or description</p>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-4">French Roles:</h3>
+                        <div id="roles-container" class="space-y-3">
+                            <!-- Draggable roles will be generated here -->
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-4">Activities:</h3>
+                        <div id="activities-container" class="space-y-3">
+                            <!-- Drop zones will be generated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="matching-success" class="hidden mt-6 text-center">
+                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4">
+                        <span class="mr-2">🎉</span>
+                        Perfect matches! You understand the team roles!
+                    </div>
+                    <button onclick="completeActivity(2)" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
+                        Continue to Dialogue Practice →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity 3: Fill-in-the-Blank -->
+        <section id="activity-3" class="activity-section mb-12 hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">💬 3. Fill-in-the-Blank Dialogue</h2>
+                <p class="text-gray-600 mb-6">Choose the correct word to complete the conversation</p>
+                
+                <div class="bg-gray-50 rounded-lg p-6 max-w-2xl mx-auto">
+                    <div class="space-y-4" id="dialogue-container">
+                        <!-- Dialogue will be generated here -->
+                    </div>
+                </div>
+                
+                <div id="dialogue-success" class="hidden mt-6 text-center">
+                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4">
+                        <span class="mr-2">🌟</span>
+                        Bravo! Perfect conversation!
+                    </div>
+                    <button onclick="completeActivity(3)" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
+                        Continue to ID Card Creator →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity 4: ID Card -->
+        <section id="activity-4" class="activity-section mb-12 hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">🧑‍💻 4. Create Your iGEM ID Card</h2>
+                <p class="text-gray-600 mb-6">Fill in the blanks to create your iGEM identity card in French</p>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <form id="id-card-form" class="space-y-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Your Name:</label>
+                                <input type="text" id="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="Enter your name">
+                            </div>
+                            <div>
+                                <label for="country" class="block text-sm font-medium text-gray-700 mb-2">Country:</label>
+                                <select id="country" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                    <option value="">Choose a country</option>
+                                    <option value="Espagne">Espagne</option>
+                                    <option value="France">France</option>
+                                    <option value="Italie">Italie</option>
+                                    <option value="Allemagne">Allemagne</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Role:</label>
+                                <select id="role" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
+                                    <option value="">Choose your role</option>
+                                    <option value="biologie">biologie</option>
+                                    <option value="wiki">wiki</option>
+                                    <option value="communication">communication</option>
+                                    <option value="design">design</option>
+                                </select>
+                            </div>
+                            <button type="button" onclick="generateCard()" class="w-full custom-red text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity">
+                                Create My Card
+                            </button>
+                        </form>
+                        <div id="id-card-success" class="hidden mt-4 text-center">
+                            <button onclick="completeActivity(4)" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
+                                Continue to Final Quiz →
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="id-card-preview" class="hidden">
+                            <div class="bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-xl p-6 text-center">
+                                <div class="w-16 h-16 custom-red rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <span class="text-white text-2xl">👋</span>
+                                </div>
+                                <div id="card-content" class="space-y-2 text-gray-800">
+                                    <!-- Card content will be generated here -->
+                                </div>
+                                <div class="mt-4 text-xs text-gray-500">iGEM Team Member</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity 5: Quick Quiz -->
+        <section id="activity-5" class="activity-section mb-12 hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">🧩 5. Quick Quiz</h2>
+                <p class="text-gray-600 mb-6">Review key words and meanings</p>
+                
+                <div id="quiz-container" class="space-y-6">
+                    <!-- Quiz questions will be generated here -->
+                </div>
+                
+                <div id="quiz-success" class="hidden mt-6 text-center">
+                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4">
+                        <span class="mr-2">🎯</span>
+                        Excellent! You've mastered the basics!
+                    </div>
+                    <button onclick="completeActivity(5)" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
+                        Complete Level 1 →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Completion Screen -->
+        <section id="completion-screen" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+                <div class="mb-6">
+                    <div class="w-20 h-20 custom-gold rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-white text-3xl">🏆</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Congratulations!</h2>
+                    <p class="text-xl text-gray-600 mb-6">You've finished Level 1 – Création d'équipe</p>
+                    <p class="text-gray-700 mb-8">You can now introduce yourself in French and describe your iGEM role.</p>
+                </div>
+                
+                <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 border-2 border-yellow-300 rounded-lg p-6 mb-8">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Secret word:</h3>
+                    <div class="text-3xl font-bold text-custom-red">🗝️ ÉQUIPE</div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="nextLevel()" class="custom-gold text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity">
+                        Next Level → Human Practices & Education
+                    </button>
+                    <button onclick="reviewVocabulary()" class="border-2 border-red-600 text-red-600 px-6 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors">
+                        Review Vocabulary
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let currentActivity = 1;
+        let completedActivities = 0;
+        
+        // Flashcard data
+        const flashcards = [
+            { french: "Bonjour !", english: "Hello!" },
+            { french: "Je m'appelle Marie.", english: "My name is Marie." },
+            { french: "Enchanté(e).", english: "Nice to meet you." },
+            { french: "Je viens d'Espagne.", english: "I'm from Spain." },
+            { french: "J'ai 21 ans.", english: "I'm 21 years old." },
+            { french: "J'étudie la biologie.", english: "I study biology." },
+            { french: "Je travaille dans le laboratoire.", english: "I work in the lab." },
+            { french: "Chef d'équipe.", english: "Team leader." },
+            { french: "Chercheur.", english: "Researcher." },
+        ];
+        
+        // Matching game data
+        const matchingPairs = [
+            { role: "Je travaille dans le laboratoire", activity: "Does experiments in the lab" },
+            { role: "Chef d'équipe", activity: "Leads the team" },
+            { role: "Chercheur", activity: "I do research" },
+            { role: "Je m'appelle Marie. Je suis un chef d'équipe", activity: "Maria Leads the team" },
+            { role: "Bonjour! J'ai 25 ans", activity: "They participate in overgrad" }
+        ];
+        
+        // Quiz data
+        const quizQuestions = [
+            {
+                question: '"Je travaille dans le laboratoire" means: (From flashcards)',
+                options: ["I work in the lab", "I study French", "I'm the team leader"],
+                correct: 0
+            },
+            {
+                question: 'How do you say "Nice to meet you" in French? (From flashcards)',
+                options: ["Bonjour", "Enchanté(e)", "Au revoir"],
+                correct: 1
+            },
+            {
+                question: '"Chef d\'équipe" means: (From matching game)',
+                options: ["Team member", "Team leader", "Team project"],
+                correct: 1
+            }
+        ];
+        
+        // Initialize the game
+        function initGame() {
+            generateFlashcards();
+            generateMatchingGame();
+            generateDialogue();
+            generateQuiz();
+        }
+        
+        // Generate flashcards
+        function generateFlashcards() {
+            const container = document.getElementById('flashcards-container');
+            container.innerHTML = '';
+            
+            flashcards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'flip-card';
+                cardElement.innerHTML = `
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="text-lg font-semibold">${card.french}</div>
+                        </div>
+                        <div class="flip-card-back">
+                            <div>
+                                <div class="text-lg font-semibold text-gray-800 mb-2">${card.english}</div>
+                                <div class="text-sm text-gray-600">${card.french}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                cardElement.addEventListener('click', () => {
+                    cardElement.classList.toggle('flipped');
+                    checkFlashcardCompletion();
+                });
+                
+                container.appendChild(cardElement);
+            });
+        }
+        
+        function checkFlashcardCompletion() {
+            const flippedCards = document.querySelectorAll('.flip-card.flipped').length;
+            if (flippedCards === flashcards.length) {
+                document.getElementById('flashcard-success').classList.remove('hidden');
+            }
+        }
+        
+        // Generate matching game
+        function generateMatchingGame() {
+            const rolesContainer = document.getElementById('roles-container');
+            const activitiesContainer = document.getElementById('activities-container');
+            
+            // Shuffle roles for variety
+            const shuffledPairs = [...matchingPairs].sort(() => Math.random() - 0.5);
+            
+            shuffledPairs.forEach((pair, index) => {
+                // Create draggable role
+                const roleElement = document.createElement('div');
+                roleElement.className = 'drag-item bg-red-100 border-2 border-red-300 rounded-lg p-3 text-center font-medium text-red-800';
+                roleElement.draggable = true;
+                roleElement.textContent = pair.role;
+                roleElement.dataset.roleId = index;
+                
+                roleElement.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', index);
+                    roleElement.classList.add('dragging');
+                });
+                
+                roleElement.addEventListener('dragend', () => {
+                    roleElement.classList.remove('dragging');
+                });
+                
+                rolesContainer.appendChild(roleElement);
+                
+                // Create drop zone
+                const activityElement = document.createElement('div');
+                activityElement.className = 'drop-zone bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-3 text-center text-gray-700';
+                activityElement.textContent = pair.activity;
+                activityElement.dataset.activityId = index;
+                
+                activityElement.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    activityElement.classList.add('drag-over');
+                });
+                
+                activityElement.addEventListener('dragleave', () => {
+                    activityElement.classList.remove('drag-over');
+                });
+                
+                activityElement.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    const roleId = e.dataTransfer.getData('text/plain');
+                    const activityId = activityElement.dataset.activityId;
+                    
+                    activityElement.classList.remove('drag-over');
+                    
+                    if (roleId === activityId) {
+                        activityElement.classList.add('correct');
+                        activityElement.innerHTML = `<div class="text-green-800 font-semibold">✅ ${pair.role}</div><div class="text-sm text-gray-600 mt-1">${pair.activity}</div>`;
+                        
+                        // Remove the draggable item
+                        const roleElement = document.querySelector(`[data-role-id="${roleId}"]`);
+                        if (roleElement) roleElement.remove();
+                        
+                        checkMatchingCompletion();
+                    }
+                });
+                
+                activitiesContainer.appendChild(activityElement);
+            });
+        }
+        
+        function checkMatchingCompletion() {
+            const correctMatches = document.querySelectorAll('.drop-zone.correct').length;
+            if (correctMatches === matchingPairs.length) {
+                createConfetti();
+                document.getElementById('matching-success').classList.remove('hidden');
+            }
+        }
+        
+        function createConfetti() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = ['#f59e0b', '#dc2626', '#10b981'][Math.floor(Math.random() * 3)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
+        
+        // Generate dialogue
+        function generateDialogue() {
+            const container = document.getElementById('dialogue-container');
+            const dialogue = [
+                {
+  speaker: "👩",
+  text: "____ Comment tu t'appelles ?",
+  dropdown: ["Bonjour!", "Où", "Quand"],
+  correct: 0,
+  after: "👨 Je m'appelle Alex."
+}
+,
+                { speaker: "👩", text: "Moi, c'est Irene. J'ai' 24 ", dropdown: ["anys", "ans", "Allemagne"], correct: 1, after: "Uhhh, did you turn 24 before March?!!" },
+                { speaker: "👩", text: "Je suis chef", dropdown: ["chamemberg", "d'équipe", "d'etiquete"], correct: 1, after: "Wow, how did you survived the burocracy?" }
+            ];
+            
+            dialogue.forEach((line, index) => {
+                const lineElement = document.createElement('div');
+                lineElement.className = 'flex items-start space-x-3';
+                
+                let content = `<div class="text-2xl">${line.speaker}</div><div class="flex-1">`;
+                
+                if (line.dropdown) {
+                    content += `${line.text}<select class="dialogue-select mx-1 px-2 py-1 border border-gray-300 rounded" data-correct="${line.correct}">
+                        <option value="">___</option>
+                        ${line.dropdown.map((option, i) => `<option value="${i}">${option}</option>`).join('')}
+                    </select>${line.after}`;
+                } else {
+                    content += line.text;
+                }
+                
+                content += '</div>';
+                lineElement.innerHTML = content;
+                container.appendChild(lineElement);
+            });
+            
+            // Add event listeners to dropdowns
+            document.querySelectorAll('.dialogue-select').forEach(select => {
+                select.addEventListener('change', (e) => {
+                    const correct = parseInt(e.target.dataset.correct);
+                    const selected = parseInt(e.target.value);
+                    
+                    if (selected === correct) {
+                        e.target.classList.add('bg-green-100', 'border-green-500');
+                        e.target.classList.remove('bg-red-100', 'border-red-500');
+                    } else if (e.target.value !== '') {
+                        e.target.classList.add('bg-red-100', 'border-red-500');
+                        e.target.classList.remove('bg-green-100', 'border-green-500');
+                    }
+                    
+                    checkDialogueCompletion();
+                });
+            });
+        }
+        
+        function checkDialogueCompletion() {
+            const selects = document.querySelectorAll('.dialogue-select');
+            const correctSelects = document.querySelectorAll('.dialogue-select.bg-green-100');
+            
+            if (correctSelects.length === selects.length) {
+                document.getElementById('dialogue-success').classList.remove('hidden');
+            }
+        }
+        
+        // Generate ID card
+        function generateCard() {
+            const name = document.getElementById('name').value;
+            const country = document.getElementById('country').value;
+            const role = document.getElementById('role').value;
+            
+            if (!name || !country || !role) {
+                alert('Please fill in all fields!');
+                return;
+            }
+            
+            const preview = document.getElementById('id-card-preview');
+            const content = document.getElementById('card-content');
+            
+            content.innerHTML = `
+                <div class="text-lg font-semibold">👋 Je m'appelle ${name}.</div>
+                <div class="text-lg">Je viens d'${country}.</div>
+                <div class="text-lg">Je suis concepteur de ${role} dans l'équipe iGEM.</div>
+            `;
+            
+            preview.classList.remove('hidden');
+            preview.classList.add('pulse-success');
+            
+            setTimeout(() => {
+                preview.classList.remove('pulse-success');
+                document.getElementById('id-card-success').classList.remove('hidden');
+            }, 1000);
+        }
+        
+        // Generate quiz
+        function generateQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            quizQuestions.forEach((q, qIndex) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = 'bg-gray-50 rounded-lg p-6';
+                questionElement.innerHTML = `
+                    <h3 class="font-semibold text-gray-800 mb-4">${qIndex + 1}. ${q.question}</h3>
+                    <div class="space-y-2">
+                        ${q.options.map((option, oIndex) => `
+                            <label class="flex items-center space-x-3 cursor-pointer hover:bg-white rounded p-2 transition-colors">
+                                <input type="radio" name="q${qIndex}" value="${oIndex}" class="text-red-600 focus:ring-red-500">
+                                <span>${option}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                
+                container.appendChild(questionElement);
+            });
+            
+            // Add event listeners to radio buttons
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', checkQuizCompletion);
+            });
+        }
+        
+        function checkQuizCompletion() {
+            const questions = quizQuestions.length;
+            let correctAnswers = 0;
+            
+            quizQuestions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected && parseInt(selected.value) === q.correct) {
+                    correctAnswers++;
+                    selected.closest('label').classList.add('bg-green-100', 'text-green-800');
+                } else if (selected) {
+                    selected.closest('label').classList.add('bg-red-100', 'text-red-800');
+                }
+            });
+            
+            if (correctAnswers === questions) {
+                document.getElementById('quiz-success').classList.remove('hidden');
+            }
+        }
+        
+        // Activity completion
+        function completeActivity(activityNumber) {
+            completedActivities++;
+            updateProgress();
+            
+            if (activityNumber < 5) {
+                document.getElementById(`activity-${activityNumber}`).classList.add('hidden');
+                document.getElementById(`activity-${activityNumber + 1}`).classList.remove('hidden');
+                document.getElementById(`activity-${activityNumber + 1}`).classList.add('fade-in');
+                currentActivity = activityNumber + 1;
+            } else {
+                document.getElementById(`activity-${activityNumber}`).classList.add('hidden');
+                document.getElementById('completion-screen').classList.remove('hidden');
+                document.getElementById('completion-screen').classList.add('fade-in');
+            }
+        }
+        
+        function updateProgress() {
+            const progress = (completedActivities / 5) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+        
+        function nextLevel() {
+            alert('🎉 Level 2 coming soon! You\'ll learn about Human Practices & Education in French!');
+        }
+        
+        function reviewVocabulary() {
+            // Reset to first activity
+            document.querySelectorAll('.activity-section').forEach(section => section.classList.add('hidden'));
+            document.getElementById('completion-screen').classList.add('hidden');
+            document.getElementById('activity-1').classList.remove('hidden');
+            currentActivity = 1;
+            completedActivities = 0;
+            updateProgress();
+            
+            // Reset all activities
+            document.querySelectorAll('.flip-card').forEach(card => card.classList.remove('flipped'));
+            document.querySelectorAll('.hidden').forEach(el => {
+                if (el.id.includes('success')) el.classList.add('hidden');
+            });
+        }
+        
+        // Initialize the game when page loads
+        document.addEventListener('DOMContentLoaded', initGame);
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'991a1faef25e13ae',t:'MTc2MDk4MDE3NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
