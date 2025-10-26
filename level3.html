@@ -73,94 +73,73 @@
             transform: rotateY(180deg);
         }
 
-        /* Activity Styles */
-        .choice-button {
-            transition: all 0.2s ease;
-            user-select: none;
-        }
-
-        .choice-button.correct {
-            background-color: #10b981;
-            color: white;
-        }
-
-        .choice-button.incorrect {
-            background-color: #ef4444;
-            color: white;
-        }
-
+        /* Activity 3: Chaotic Protocol Styles */
         .drag-item {
             cursor: grab;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             user-select: none;
-            /* Contaminant now uses the same color as the rest */
-            background-color: #fef2f2;
-            border: 1px solid #fca5a5;
-            color: #b91c1c;
+            touch-action: none; /* Crucial for touch compatibility */
         }
         
-        .drop-zone {
-            border: 2px dashed #d1d5db;
-            min-height: 120px;
+        .drag-item.dropped {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        .drop-zone-pcr {
+            height: 300px;
+            border: 4px solid #374151;
             background-color: #f9fafb;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-
-        .drop-zone.drag-over {
-            border-color: #f59e0b; 
-            background-color: #fffbeb;
-        }
-
-        /* Background Color Transitions (More Drastic) */
-        .bg-calme { background-color: #dbeafe; } /* Azul suave (Calmado) - Sin cambios */
-        .bg-pression { background-color: #fca5a5; } /* Rojo intermedio (Antes Amarillo 200, ahora Red 300) */
-        .bg-panique { background-color: #ef4444; } /* Rojo fuerte (Antes Red 200, ahora Red 500) */
-        .bg-final-panique { background-color: #b91c1c; } /* Rojo muy oscuro/intenso (Antes Red 400, ahora Red 700) */
-
-        /* Sleep Hours Pulse */
-        .sleep-pulse {
-            animation: sleepPulse 0.5s ease-in-out;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            background: none; /* Start with no liquid */
         }
         
-        @keyframes sleepPulse {
-            0% { transform: scale(1); background-color: #f59e0b; }
-            50% { transform: scale(1.1); background-color: #ef4444; }
-            100% { transform: scale(1); background-color: #f59e0b; }
+        .drop-zone-pcr.drag-over {
+            border-color: #3b82f6; /* Blue border on hover */
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+            transform: scale(1.02);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
         }
         
-        /* Mobile-specific adjustments for drop zone */
-        #pcr-tube-drop { 
-            touch-action: none; /* Helps with some mobile drag-and-drop issues */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="min-h-full font-sans transition-all bg-calme" id="game-body">
-    <header class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-10">
+<body class="min-h-full bg-gray-50 font-sans">
+    <header class="bg-white shadow-sm border-b border-gray-100">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="index.html"><div class="flex items-center space-x-2">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center">
-                        <img src="FROG skippit RED.png" alt="igem barcelona-ub logo" class="w-full h-full object-cover p-2">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <div class="w-8 h-8 custom-red rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">iG</span>
                     </div>
-                    <span class="text-custom-red font-bold text-xl hidden sm:inline-block">LE GRAND JAMBOREE</span>
-                    <span class="text-custom-red font-bold text-xl inline-block sm:hidden">JAMBOREE</span>
-                </div>
+                    <span class="text-gray-900 font-medium">Le Grand Jamboree</span>
                 </a>
-                
-                <div class="flex items-center space-x-2 sm:space-x-4">
-                    <div class="text-right sm:text-left">
-                        <div class="text-lg sm:text-xl font-bold text-gray-900" id="score">0 / 105 pts</div>
-                        <div class="text-xs sm:text-sm text-gray-600">
-                             <span class="hidden sm:inline">😴 Sleep Hours:</span> 
-                             <span class="inline sm:hidden">😴:</span> 
-                             <span id="sleep-hours" class="font-bold inline-flex items-center custom-gold text-white px-2 rounded-full">8h</span>
-                        </div>
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="custom-red text-white px-3 py-1 rounded-md text-sm font-medium hover:opacity-90 transition duration-150 flex items-center space-x-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /></svg>
+                        <span>Menu</span>
+                    </a>
+                    
+                    <div class="text-right">
+                        <div class="text-xl font-bold text-gray-900" id="score">0 / 100 pts</div>
+                        <div class="text-sm text-gray-600">🌙 Sleep Hours: <span id="sleep-hours">8h</span></div>
                     </div>
-                    <div class="w-20 sm:w-32 bg-gray-200 rounded-full h-2 flex-shrink-0">
+                    <div class="w-32 bg-gray-200 rounded-full h-2">
                         <div id="progress-bar" class="progress-bar bg-red-600 h-2 rounded-full" style="width: 0%"></div>
                     </div>
                 </div>
-                
             </div>
         </nav>
     </header>
@@ -168,22 +147,17 @@
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="text-center mb-8">
             <h1 class="text-4xl font-bold text-gray-900 mb-4">
-                Level 3: All-Nighter Lab 🔬
+                Level 3: All-Nighter Lab 🌡️
             </h1>
             <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                The Final Race: Solve the Wet Lab crises to <strong>survivre</strong>!
+                It's 2 AM and your project needs the final data. Master lab techniques and French terms related to **Urgence** and **Protocol**!
             </p>
-        </div>
-
-        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8" role="alert">
-            <p class="font-bold">New Metric: Sleep Hours (😴)</p>
-            <p class="text-sm">Every mistake you make costs you time, reducing your precious <strong>Sleep Hours</strong>. If you run out, you'll be too tired for the Jamboree! Don't <strong>échouer</strong>!</p>
         </div>
 
         <section id="activity-1" class="activity-section mb-12">
             <div class="bg-white rounded-xl shadow-lg p-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">🧩 1. Flashcards: Wet Lab Vocabulary</h2>
-                <p class="text-gray-600 mb-6">Memorize these words. You will need them to <strong>survivre</strong> the lab crises!</p>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">🧩 1. Flashcards: Lab Vocabulary</h2>
+                <p class="text-gray-600 mb-6">Click all cards to continue. (You'll need these words for the next activity!)</p>
                 
                 <div class="grid md:grid-cols-4 gap-6" id="flashcards-container">
                     </div>
@@ -191,79 +165,68 @@
                 <div id="flashcard-success" class="hidden mt-6 text-center">
                     <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4">
                         <span class="mr-2">✅</span>
-                        Excellent! You mastered the panic vocabulary. (30 pts)
+                        Excellent! You have mastered the lab vocabulary.
                     </div>
                     <button onclick="completeActivity(1)" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity" disabled id="activity-1-complete">
-                        Start The Race Against Time →
+                        Continue to the Chaotic Protocol →
                     </button>
                 </div>
             </div>
         </section>
 
-        <section id="activity-2" class="activity-section mb-12 hidden">
-            <div class="bg-white rounded-xl shadow-lg p-8 fade-in" id="panique-container">
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">⏰ 2. Panic Timeline: Resolve the Crisis</h2>
-                <div class="text-center mb-6">
-                    <div class="text-3xl font-bold text-custom-red mb-2" id="current-stage-title"></div>
-                    <p class="text-lg text-gray-600 font-semibold" id="current-crisis-text"></p>
-                </div>
-
-                <div id="crisis-options" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    </div>
-                
-                <div id="crisis-feedback" class="mt-6 text-center hidden">
-                    <p class="text-xl font-semibold" id="feedback-text"></p>
-                </div>
-
-                <div id="chronologie-success" class="hidden mt-6 text-center">
-                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4">
-                        <span class="mr-2">🎉</span>
-                        All timeline emergencies resolved! (35 pts)
-                    </div>
-                    <button onclick="completeActivity(2)" class="custom-red text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity" id="activity-2-complete">
-                        ✓ Continue to Chaotic Protocol
-                    </button>
-                </div>
-            </div>
-        </section>
 
         <section id="activity-3" class="activity-section mb-12 hidden">
             <div class="bg-white rounded-xl shadow-lg p-8 fade-in">
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">🧪 3. Chaotic Protocol: The PCR of Hope</h2>
-                <p class="text-gray-600 mb-4">Your last chance for a <strong>résultat</strong>. Drag the 3 essential components into the PCR tube so you don't <strong>échouer</strong>!</p>
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">🔬 2. Chaotic Protocol: The PCR!</h2>
+                <p class="text-gray-600 mb-4">Add the 3 **Correct** reagents to the PCR tube. Drag a **Contaminant** and lose 4 hours of sleep!</p>
                 
-                <div class="flex flex-col-reverse md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12">
-                    
-                    <div id="reactifs-container" class="grid grid-cols-2 gap-4 w-full md:w-1/2 order-2 md:order-1 mt-8 md:mt-0">
-                        <div class="drag-item p-4 rounded-lg text-center" draggable="true" data-type="correct">
-                            <span class="font-bold text-lg">Vérifier</span> DNA
-                        </div>
-                        <div class="drag-item p-4 rounded-lg text-center" draggable="true" data-type="correct">
-                            <span class="font-bold text-lg">Trouver</span> Primers
-                        </div>
-                        <div class="drag-item p-4 rounded-lg text-center" draggable="true" data-type="correct">
-                            <span class="font-bold text-lg">Répéter</span> Buffer
-                        </div>
-                        <div class="drag-item p-4 rounded-lg text-center" draggable="true" data-type="contaminant">
-                            <span class="font-bold text-lg">Contaminer</span> Orange Juice
-                        </div>
-                    </div>
-                    
-                    <div id="pcr-tube-drop" class="drop-zone p-6 rounded-lg w-full sm:w-48 h-48 sm:h-64 flex items-center justify-center text-center flex-col shadow-inner relative order-1 md:order-2">
-                        <div class="text-4xl">🔬</div>
-                        <div class="font-semibold text-gray-700 mt-2">PCR Tube (3 Required)</div>
-                        <div id="tube-contents" class="absolute bottom-0 w-full p-2 bg-gray-200 text-sm">0/3 Components</div>
-                    </div>
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                    <p class="text-red-700 font-semibold">🌙 Wrong choice = -4 hours of sleep!</p>
+                    <p class="text-red-700 font-semibold">⚠️ Current Sleep Hours: <span id="current-sleep-hours">8h</span></p>
+                </div>
 
+                <div class="grid md:grid-cols-3 gap-8 items-start">
+                    <div class="md:col-span-2">
+                        <h3 class="font-semibold mb-4 text-gray-700">Reagents List (Reactifs):</h3>
+                        <div class="grid grid-cols-2 gap-3" id="reactifs-container">
+                            <div class="drag-item p-4 rounded-lg bg-blue-100 border border-blue-300 text-blue-800 hover:shadow-lg" draggable="true" data-type="correct">
+                                <div class="font-semibold">ADN Polymérase</div>
+                            </div>
+                            <div class="drag-item p-4 rounded-lg bg-blue-100 border border-blue-300 text-blue-800 hover:shadow-lg" draggable="true" data-type="correct">
+                                <div class="font-semibold">Amorce (Primer)</div>
+                            </div>
+                            <div class="drag-item p-4 rounded-lg bg-blue-100 border border-blue-300 text-blue-800 hover:shadow-lg" draggable="true" data-type="correct">
+                                <div class="font-semibold">Matrice d'ADN</div>
+                            </div>
+                            <div class="drag-item p-4 rounded-lg bg-red-100 border border-red-300 text-red-800 hover:shadow-lg" draggable="true" data-type="contaminant">
+                                <div class="font-semibold">Eau contaminée</div>
+                            </div>
+                            <div class="drag-item p-4 rounded-lg bg-red-100 border border-red-300 text-red-800 hover:shadow-lg" draggable="true" data-type="contaminant">
+                                <div class="font-semibold">Acide (Acid)</div>
+                            </div>
+                            <div class="drag-item p-4 rounded-lg bg-red-100 border border-red-300 text-red-800 hover:shadow-lg" draggable="true" data-type="contaminant">
+                                <div class="font-semibold">Protéase</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col items-center">
+                        <h3 class="font-semibold mb-4 text-gray-700">PCR Tube (Zone de dépôt):</h3>
+                        <div id="pcr-tube-drop" class="drop-zone-pcr w-24 rounded-b-full rounded-t-lg shadow-xl" data-target="pcr-mix">
+                            <div class="text-4xl text-gray-400">🧪</div>
+                            <div class="text-lg font-bold text-gray-500 mt-2">PCR Tube</div>
+                            <div id="tube-contents">0/3 Components</div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div id="protocole-success" class="hidden mt-6 text-center">
                     <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4">
                         <span class="mr-2">🎉</span>
-                        PCR will <strong>réussir</strong>! (40 pts)
+                        Protocol **Réussir**! You didn't lose any sleep!
                     </div>
-                    <button id="activity-3-complete" class="custom-red text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity" onclick="completeActivity(3)">
-                        🎉 Complete Level!
+                    <button id="activity-3-complete" class="custom-red text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity" onclick="completeActivity(3)" disabled>
+                        ✓ Finish the Level!
                     </button>
                 </div>
             </div>
@@ -277,130 +240,62 @@
                 <div class="text-lg">😴 Final Sleep Hours: <span id="final-sleep-hours">8h</span></div>
                 <div class="text-sm mt-2">You managed the <strong>Urgence</strong> and avoided <strong>Contamination</strong>.</div>
             </div>
-            <button class="custom-red text-white px-8 py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition-opacity">
+            <a href="level4.html" class="custom-red text-white px-8 py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition-opacity">
                 🚀 Proceed to Level 4: The Jamboree
-            </button>
-        </section>
+            </a>
+            </section>
     </main>
 
     <script>
-        // --- GLOBAL CONSTANTS ---
-        const SLEEP_HOUR_LOSS = 0.5; // Half hour lost per mistake
-        const CONTAMINATION_LOSS = 1.0; // 1 full hour lost for contamination
-        const DEFAULT_TUBE_HTML = '<div class="text-4xl">🔬</div><div class="font-semibold text-gray-700 mt-2">PCR Tube (3 Required)</div><div id="tube-contents" class="absolute bottom-0 w-full p-2 bg-gray-200 text-sm">0/3 Components</div>';
-
-        // --- GLOBAL VARIABLES ---
         let currentActivity = 1;
         let score = 0;
-        let sleepHours = 8; // Starting sleep hours
+        let sleepHours = 8;
         let flippedCards = new Set();
-        let currentCrisisIndex = 0;
         let pcrComponents = 0;
         
-        // --- DATA ---
+        // Constants
+        const CONTAMINATION_LOSS = -4; // Pérdida de horas de sueño
+        const DEFAULT_TUBE_HTML = '<div class="text-4xl text-gray-400">🧪</div><div class="text-lg font-bold text-gray-500 mt-2">PCR Tube</div><div id="tube-contents">0/3 Components</div>';
         
+        // Data for Flashcards
         const flashcards = [
-            { french: "Analyser", english: "To analyze", example: "Il faut analyser les données." },
-            { french: "Répéter", english: "To repeat", example: "L'expérience a échoué, il faut répéter." },
-            { french: "Vérifier", english: "To check/verify", example: "Vérifier le protocole pour ne pas échouer." },
-            { french: "Échouer", english: "To fail", example: "Pourquoi la PCR continue d'échouer?" },
-            { french: "Se dépêcher", english: "To hurry", example: "La deadline arrive! Se dépêcher!" },
-            { french: "Nettoyer", english: "To clean", example: "Nettoyer le liquide renversé." },
-            { french: "Cacher", english: "To hide", example: "Il faut cacher les preuves de la pizza." },
-            { french: "Trouver", english: "To find", example: "Impossible de trouver le bon tube." },
-            { french: "Contaminer", english: "To contaminate", example: "Attention de ne pas contaminer le milieu." },
-            { french: "Urgence", english: "Emergency", example: "La date limite approche, c'est une urgence!" },
-            { french: "Résultat", english: "Result", example: "Ce résultat de dernière minute change tout." },
-            { french: "Survivre", english: "To survive", example: "Avec du café, nous allons survivre." }
+            { french: "Urgence", english: "Emergency / Urgence" },
+            { french: "Protocole", english: "Protocol / Protocole" },
+            { french: "Réussir", english: "To succeed / Réussir" },
+            { french: "Contamination", english: "Contamination / Contamination" },
+            { french: "Répéter", english: "To repeat / Répéter" },
+            { french: "Résultat", english: "Result / Résultat" },
+            { french: "Pipette", english: "Pipette / Pipette" },
+            { french: "Centrifugeuse", english: "Centrifuge / Centrifugeuse" }
         ];
 
-        const crises = [
-            {
-                stage: "Phase 1: One Month Left (Calm)",
-                text: "CRISIS: The crucial experiment has <strong>échouer</strong>. The team is demoralized.",
-                colorClass: "bg-calme",
-                options: [
-                    { word: "Répéter", correct: true, feedback: "Correct! We <strong>répéter</strong> for a better <strong>résultat</strong>." },
-                    { word: "Cacher", correct: false, feedback: "Wrong! <strong>Cacher</strong> failure won't help. -0.5h Sleep!" },
-                    { word: "Survivre", correct: false, feedback: "You can't just <strong>survivre</strong> without working! -0.5h Sleep!" },
-                    { word: "Analyser", correct: false, feedback: "You can't <strong>Analyser</strong> what doesn't exist. -0.5h Sleep!" }
-                ]
-            },
-            {
-                stage: "Phase 2: Wiki Freeze J-3 (Pressure)",
-                text: "CRISIS: The lab is closed for the holiday, but you need a key <strong>résultat</strong>. You must be discreet!",
-                colorClass: "bg-pression",
-                options: [
-                    { word: "Contaminer", correct: false, feedback: "Bad idea! You'll <strong>Contaminer</strong> everything! -0.5h Sleep!" },
-                    { word: "Cacher", correct: true, feedback: "Yes! Stealth mode activated. <strong>Cacher</strong> and get out! <strong>Urgence</strong> solved." },
-                    { word: "Vérifier", correct: false, feedback: "Too slow! Security will <strong>Trouver</strong> you. -0.5h Sleep!" },
-                    { word: "Se dépêcher", correct: false, feedback: "Running is not discreet. -0.5h Sleep!" }
-                ]
-            },
-            {
-                stage: "Phase 3: Jamboree D-1 (Total Panic)",
-                text: "CRISIS: Final data is on the machine! 10 minutes until the deadline. You must check if the <strong>résultat</strong> is good!",
-                colorClass: "bg-panique",
-                options: [
-                    { word: "Trouver", correct: false, feedback: "The data is here! Don't waste time trying to <strong>Trouver</strong> it. -0.5h Sleep!" },
-                    { word: "Analyser", correct: true, feedback: "Yes! <strong>Analyser</strong> the <strong>résultat</strong> is the crucial last step. Well done!" },
-                    { word: "Échouer", correct: false, feedback: "That's the failure mindset! -0.5h Sleep!" },
-                    { word: "Nettoyer", correct: false, feedback: "Do you really have time to <strong>Nettoyer</strong> now?! It's the end of the world! -0.5h Sleep!" }
-                ]
-            },
-            {
-                stage: "Phase 4: Aftermath (Final Panic)",
-                text: "CRISIS: A tube fell and there is dangerous liquid on the floor. <strong>Urgence</strong>!",
-                colorClass: "bg-final-panique",
-                options: [
-                    { word: "Se dépêcher", correct: false, feedback: "Running around won't help! -0.5h Sleep!" },
-                    { word: "Analyser", correct: false, feedback: "Stop trying to <strong>Analyser</strong> the spill! -0.5h Sleep!" },
-                    { word: "Nettoyer", correct: true, feedback: "Safety first! <strong>Nettoyer</strong> the spill is mandatory. Go!" },
-                    { word: "Échouer", correct: false, feedback: "This is not the time to give up! -0.5h Sleep!" }
-                ]
-            }
-        ];
-        
-        // --- FUNCTIONS ---
+        // --- GAME FLOW FUNCTIONS ---
 
         function initGame() {
             generateFlashcards();
-            initializeDragAndDrop();
-            updateScore(0);
-            updateSleepHours(0); // Update display with initial hours
+            initializeDragAndDrop(); 
             updateProgress();
+            updateSleepHours(0);
+            document.getElementById('score').textContent = `${score} / 100 pts`;
+            document.getElementById('activity-1').classList.remove('hidden');
         }
 
-        function updateSleepHours(loss = 0) {
-            sleepHours = Math.max(0, sleepHours - loss);
-            const hoursDisplay = document.getElementById('sleep-hours');
-            
-            hoursDisplay.textContent = `${sleepHours.toFixed(1)}h`;
-
-            if (loss > 0) {
-                hoursDisplay.classList.add('sleep-pulse');
-                setTimeout(() => hoursDisplay.classList.remove('sleep-pulse'), 500);
-            }
-        }
-        
         function generateFlashcards() {
             const container = document.getElementById('flashcards-container');
             container.innerHTML = '';
-            flippedCards = new Set(); 
-
-            flashcards.forEach((card) => {
+            
+            flashcards.forEach((card, index) => {
                 const cardElement = document.createElement('div');
                 cardElement.className = 'flip-card';
                 cardElement.innerHTML = `
                     <div class="flip-card-inner">
                         <div class="flip-card-front">
                             <div class="text-2xl font-bold mb-2">${card.french}</div>
-                            <div class="text-sm opacity-80">Click to see</div>
+                            <div class="text-sm opacity-80">Click to view</div>
                         </div>
                         <div class="flip-card-back">
                             <div>
                                 <div class="text-lg font-semibold text-gray-800 mb-2">${card.english}</div>
-                                <div class="text-xs text-blue-600 italic mt-1">"${card.example}"</div>
                             </div>
                         </div>
                     </div>
@@ -422,6 +317,7 @@
             if (flippedCards.size === flashcards.length) {
                 document.getElementById('flashcard-success').classList.remove('hidden');
                 document.getElementById('activity-1-complete').disabled = false;
+                document.getElementById('activity-1-complete').classList.add('pulse-success');
                 updateScore(30);
             }
         }
@@ -432,113 +328,71 @@
             currentSection.classList.add('hidden');
             
             if (activityNumber === 1) {
-                document.getElementById('activity-2').classList.remove('hidden');
-                document.getElementById('activity-2').classList.add('fade-in');
-                currentActivity = 2;
-                loadCrisis(0);
-            } else if (activityNumber === 2) {
                 document.getElementById('activity-3').classList.remove('hidden');
                 document.getElementById('activity-3').classList.add('fade-in');
-                currentActivity = 3;
-                document.getElementById('game-body').classList.remove('bg-calme', 'bg-pression', 'bg-panique', 'bg-final-panique');
-                document.getElementById('game-body').classList.add('bg-final-panique'); // Hold the highest stress color
+                currentActivity = 2;
+                updateProgress();
             } else if (activityNumber === 3) {
+                // Chaotic Protocol -> Final Results
                 showFinalResults();
                 document.getElementById('final-results').classList.remove('hidden');
                 document.getElementById('final-results').classList.add('fade-in');
-                currentActivity = 4;
-                document.getElementById('game-body').style.backgroundColor = '#f8fafc'; // Reset background for completion
+                currentActivity = 3;
             }
-            updateProgress();
         }
 
         function updateProgress() {
-            const progress = Math.round(((currentActivity - 1) / 3) * 100);
+            const progress = Math.round(((currentActivity - 1) / 2) * 100);
             document.getElementById('progress-bar').style.width = `${progress}%`;
         }
-        
+
+        // --- GAMIFICATION FUNCTIONS ---
+
         function updateScore(points) {
             score += points;
-            document.getElementById('score').textContent = `${score} / 105 pts`;
+            document.getElementById('score').textContent = `${score} / 100 pts`;
         }
 
-        function showFinalResults() {
-            document.getElementById('final-score').textContent = `Final Score: ${score}/105`;
-            document.getElementById('final-sleep-hours').textContent = `${sleepHours.toFixed(1)}h`;
-        }
-        
-        // --- ACTIVITY 2: PANIC TIMELINE ---
-        
-        function loadCrisis(index) {
-            if (index >= crises.length) {
-                document.getElementById('chronologie-success').classList.remove('hidden');
-                updateScore(35);
-                return;
-            }
-
-            const crisis = crises[index];
-            document.getElementById('game-body').classList.remove('bg-calme', 'bg-pression', 'bg-panique', 'bg-final-panique');
-            document.getElementById('game-body').classList.add(crisis.colorClass);
-
-            document.getElementById('current-stage-title').textContent = crisis.stage;
-            document.getElementById('current-crisis-text').innerHTML = crisis.text; // Use innerHTML for <strong> tags
-
-            const optionsContainer = document.getElementById('crisis-options');
-            optionsContainer.innerHTML = '';
+        function updateSleepHours(hoursChange) {
+            sleepHours = Math.max(0, sleepHours + hoursChange); // Sleep can't go below 0
             
-            const mixedOptions = crisis.options.sort(() => Math.random() - 0.5);
+            const sleepElement = document.getElementById('sleep-hours');
+            const currentHoursElement = document.getElementById('current-sleep-hours');
 
-            mixedOptions.forEach(option => {
-                const button = document.createElement('button');
-                button.className = 'choice-button bg-gray-200 text-gray-800 p-4 rounded-lg font-semibold hover:bg-gray-300 transition-colors';
-                button.textContent = option.word;
-                button.setAttribute('data-correct', option.correct);
-                button.setAttribute('data-feedback', option.feedback);
-                button.onclick = () => handleCrisisChoice(button, option.correct);
-                optionsContainer.appendChild(button);
-            });
-            
-            document.getElementById('crisis-feedback').classList.add('hidden');
-            document.getElementById('feedback-text').textContent = '';
-            
-            currentCrisisIndex = index;
-        }
+            sleepElement.textContent = `${sleepHours}h`;
+            currentHoursElement.textContent = `${sleepHours}h`;
 
-        function handleCrisisChoice(selectedButton, isCorrect) {
-            const options = document.getElementById('crisis-options').querySelectorAll('button');
-            options.forEach(btn => btn.disabled = true);
-
-            const feedbackText = document.getElementById('feedback-text');
-            feedbackText.innerHTML = selectedButton.dataset.feedback; // Use innerHTML for <strong> tags
-            document.getElementById('crisis-feedback').classList.remove('hidden');
-
-            if (isCorrect) {
-                selectedButton.classList.add('correct');
-                feedbackText.classList.remove('text-red-700');
-                feedbackText.classList.add('text-green-700');
-                
-                setTimeout(() => loadCrisis(currentCrisisIndex + 1), 1500);
+            if (sleepHours <= 4) {
+                sleepElement.style.color = '#ef4444'; // Red
+                currentHoursElement.style.color = '#ef4444'; 
+                document.body.style.backgroundColor = '#fef2f2'; // Light red background for panic
             } else {
-                selectedButton.classList.add('incorrect');
-                updateSleepHours(SLEEP_HOUR_LOSS);
-                feedbackText.classList.remove('text-green-700');
-                feedbackText.classList.add('text-red-700');
-                
-                // ELIMINADA LA LÓGICA PARA MARCAR EL BOTÓN CORRECTO EN VERDE AL FALLAR
-                
-                setTimeout(() => {
-                    loadCrisis(currentCrisisIndex); // Repeat the same crisis
-                }, 2000);
+                 sleepElement.style.color = '#10b981'; // Green
+                 currentHoursElement.style.color = '#10b981'; 
+                 document.body.style.backgroundColor = '#f8fafc'; // Normal background
             }
         }
-
-        // --- ACTIVITY 3: CHAOTIC PROTOCOL (Drag & Drop) ---
         
+        function showFinalResults() {
+            document.getElementById('final-score').textContent = `Final Score: ${score}/100`;
+            document.getElementById('final-sleep-hours').textContent = `${sleepHours}h`;
+        }
+        
+        // --- TOUCH & DRAG & DROP FUNCTIONS ---
+
+        // Variables globales para el manejo de arrastre táctil
+        window._touch_drag_data = {
+            element: null,
+            type: null,
+            name: null,
+            clone: null,
+        };
+
         function initializeDragAndDrop() {
             const reactifsContainer = document.getElementById('reactifs-container');
             const pcrTubeDrop = document.getElementById('pcr-tube-drop');
             
-            // Drag Events
+            // 1. Mouse Drag Events
             reactifsContainer.addEventListener('dragstart', (e) => {
                 const item = e.target.closest('.drag-item');
                 if (item && !item.classList.contains('dropped')) {
@@ -548,66 +402,165 @@
                 }
             });
 
-            // Drop Events
             pcrTubeDrop.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'move';
                 pcrTubeDrop.classList.add('drag-over');
             });
 
-            pcrTubeDrop.addEventListener('dragleave', (e) => {
+            pcrTubeDrop.addEventListener('dragleave', () => {
                 pcrTubeDrop.classList.remove('drag-over');
             });
 
-            pcrTubeDrop.addEventListener('drop', (e) => {
-                e.preventDefault();
-                pcrTubeDrop.classList.remove('drag-over');
-                
-                const dataType = e.dataTransfer.getData('data-type');
-                const reactifName = e.dataTransfer.getData('text/plain');
-                const draggedElement = Array.from(reactifsContainer.querySelectorAll('.drag-item')).find(el => el.textContent.trim() === reactifName);
-
-                if (!draggedElement || draggedElement.classList.contains('dropped')) return;
-
-                if (dataType === 'contaminant') {
-                    // Contamination: Lose sleep, show feedback briefly, and reset the attempt (Répéter)
-                    
-                    const tubeDrop = document.getElementById('pcr-tube-drop');
-                    
-                    // 1. Brief 'CONTAMINÉ!' message
-                    tubeDrop.style.backgroundColor = '#fef2f2';
-                    tubeDrop.style.background = 'none'; // Clear any previous fill
-                    tubeDrop.innerHTML = '<div class="text-4xl text-red-600">❌</div><div class="text-lg font-bold text-red-700 mt-2">CONTAMINÉ! You must <strong>Répéter</strong>!</div>';
-                    
-                    updateSleepHours(CONTAMINATION_LOSS); // Lose 1 full hour for contamination
-                    
-                    // 2. Timeout to reset the visual and game state
-                    setTimeout(() => {
-                        resetActivity3();
-                    }, 1500); // 1.5 seconds delay for the message to be visible
-                    return;
-                }
-
-                if (dataType === 'correct') {
-                    pcrComponents++;
-                    document.getElementById('tube-contents').textContent = `${pcrComponents}/3 Components`;
-                    
-                    draggedElement.classList.add('dropped');
-                    draggedElement.draggable = false;
-                    
-                    // Visual update of the tube
-                    const newHeight = 33 * pcrComponents;
-                    pcrTubeDrop.style.background = `linear-gradient(to top, #60a5fa ${newHeight}%, #f9fafb ${newHeight}%)`;
-
-                    if (pcrComponents === 3) {
-                        document.getElementById('protocole-success').classList.remove('hidden');
-                        pcrTubeDrop.innerHTML = '<div class="text-4xl text-green-600">✅</div><div class="text-lg font-bold text-green-700 mt-2">PROTOCOL <strong>RÉUSSIR</strong>!</div>';
-                        updateScore(40);
-                    }
-                }
+            pcrTubeDrop.addEventListener('drop', handleDrop);
+            
+            // 2. Touch Events (for mobile)
+            document.querySelectorAll('.drag-item').forEach(item => {
+                // Usar passive: false para que preventDefault funcione en touchmove
+                item.addEventListener('touchstart', handleTouchStart, { passive: false });
+                item.addEventListener('touchmove', handleTouchMove, { passive: false });
+                item.addEventListener('touchend', handleTouchEnd);
             });
         }
-        
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const pcrTubeDrop = document.getElementById('pcr-tube-drop');
+            pcrTubeDrop.classList.remove('drag-over');
+            
+            // Determinar la fuente de los datos (ratón o táctil)
+            const isTouch = !e.dataTransfer;
+            
+            const dataType = isTouch ? window._touch_drag_data.type : e.dataTransfer.getData('data-type');
+            const reactifName = isTouch ? window._touch_drag_data.name : e.dataTransfer.getData('text/plain');
+            
+            const reactifsContainer = document.getElementById('reactifs-container');
+            const draggedElement = Array.from(reactifsContainer.querySelectorAll('.drag-item')).find(el => el.textContent.trim() === reactifName);
+
+            if (!draggedElement || draggedElement.classList.contains('dropped')) return;
+
+            if (dataType === 'contaminant') {
+                // Lógica de Contaminación
+                const tubeDrop = document.getElementById('pcr-tube-drop');
+                tubeDrop.style.backgroundColor = '#fef2f2';
+                tubeDrop.style.background = 'none';
+                tubeDrop.innerHTML = '<div class="text-4xl text-red-600">❌</div><div class="text-lg font-bold text-red-700 mt-2">CONTAMINÉ! You must <strong>Répéter</strong>!</div>';
+                
+                updateSleepHours(CONTAMINATION_LOSS);
+                
+                setTimeout(() => {
+                    resetActivity3();
+                }, 1500);
+                return;
+            }
+
+            if (dataType === 'correct') {
+                // Lógica de Soltar Correcto
+                pcrComponents++;
+                document.getElementById('tube-contents').textContent = `${pcrComponents}/3 Components`;
+                
+                draggedElement.classList.add('dropped');
+                draggedElement.draggable = false;
+                
+                // Efecto de llenado de líquido (azul)
+                const newHeight = 33 * pcrComponents;
+                pcrTubeDrop.style.background = `linear-gradient(to top, #60a5fa ${newHeight}%, #f9fafb ${newHeight}%)`;
+
+                if (pcrComponents === 3) {
+                    document.getElementById('protocole-success').classList.remove('hidden');
+                    document.getElementById('activity-3-complete').disabled = false;
+                    pcrTubeDrop.innerHTML = '<div class="text-4xl text-green-600">✅</div><div class="text-lg font-bold text-green-700 mt-2">PROTOCOL <strong>RÉUSSIR</strong>!</div>';
+                    updateScore(40);
+                }
+            }
+        }
+
+
+        function handleTouchStart(e) {
+            if (e.target.closest('.dropped')) return;
+            
+            const originalItem = e.target.closest('.drag-item');
+            if (!originalItem) return;
+
+            // 1. Crear un clon para arrastrar
+            const clone = originalItem.cloneNode(true);
+            clone.classList.add('fixed', 'opacity-75', 'shadow-2xl', 'z-50', 'bg-blue-200', 'border-blue-400');
+            clone.style.width = `${originalItem.offsetWidth}px`;
+            clone.style.height = `${originalItem.offsetHeight}px`;
+            clone.style.transition = 'none';
+            
+            // Posicionar el clon en la ubicación inicial
+            const rect = originalItem.getBoundingClientRect();
+            clone.style.left = `${rect.left}px`;
+            clone.style.top = `${rect.top}px`;
+            
+            document.body.appendChild(clone);
+
+            // 2. Almacenar datos en la variable global
+            window._touch_drag_data = {
+                element: originalItem,
+                type: originalItem.dataset.type,
+                name: originalItem.textContent.trim(),
+                clone: clone
+            };
+        }
+
+        function handleTouchMove(e) {
+            if (!window._touch_drag_data.clone) return;
+
+            e.preventDefault(); // Previene el scroll del móvil
+            
+            const touch = e.touches[0];
+            const clone = window._touch_drag_data.clone;
+            const pcrTubeDrop = document.getElementById('pcr-tube-drop');
+            
+            // Mover el clon con el dedo
+            clone.style.left = `${touch.clientX - clone.offsetWidth / 2}px`;
+            clone.style.top = `${touch.clientY - clone.offsetHeight / 2}px`;
+
+            // Lógica de drag-over
+            const dropRect = pcrTubeDrop.getBoundingClientRect();
+            const isOverDropZone = touch.clientX > dropRect.left && 
+                                   touch.clientX < dropRect.right &&
+                                   touch.clientY > dropRect.top &&
+                                   touch.clientY < dropRect.bottom;
+                                   
+            if (isOverDropZone) {
+                pcrTubeDrop.classList.add('drag-over');
+            } else {
+                pcrTubeDrop.classList.remove('drag-over');
+            }
+        }
+
+        function handleTouchEnd(e) {
+            if (!window._touch_drag_data.clone) return;
+            
+            const clone = window._touch_drag_data.clone;
+            const pcrTubeDrop = document.getElementById('pcr-tube-drop');
+
+            const dropRect = pcrTubeDrop.getBoundingClientRect();
+            const touch = e.changedTouches[0];
+            
+            // Verificar si la soltura ocurrió dentro de la zona de caída
+            const isDropped = touch.clientX > dropRect.left && 
+                              touch.clientX < dropRect.right &&
+                              touch.clientY > dropRect.top &&
+                              touch.clientY < dropRect.bottom;
+
+            if (isDropped) {
+                // Simular el evento 'drop' usando datos táctiles
+                handleDrop({ 
+                    preventDefault: () => {}, 
+                    dataTransfer: null 
+                });
+            }
+
+            // Limpieza y reseteo
+            clone.remove();
+            window._touch_drag_data = { element: null, type: null, name: null, clone: null };
+            pcrTubeDrop.classList.remove('drag-over');
+        }
+
         // --- MODIFIED RESET FUNCTION ---
         function resetActivity3() {
             pcrComponents = 0;
@@ -624,10 +577,12 @@
             document.querySelectorAll('#reactifs-container .drag-item').forEach(item => {
                 item.classList.remove('dropped');
                 item.draggable = true;
+                item.style.opacity = '1';
             });
             
-            // 4. Ensure success message is hidden
+            // 4. Ensure success message is hidden and button disabled
             document.getElementById('protocole-success').classList.add('hidden');
+            document.getElementById('activity-3-complete').disabled = true;
         }
 
         // Initialisation
