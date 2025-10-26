@@ -38,3 +38,11 @@ Players navigate five thematic levels, mastering key iGEM skills while learning 
 “Le Grand Jamboree” is an unofficial, fan-made, educational project.
 This work is not affiliated with, endorsed by, or sponsored by the iGEM Foundation.
 “iGEM” and “Grand Jamboree” are trademarks of the iGEM Foundation, used here for descriptive and educational purposes only.
+
+## 📜 License
+
+- Code: **MIT License** → free to use, modify, and distribute with attribution  
+- Content (text, images, gameplay design): **CC BY-NC 4.0** → attribution required, non-commercial
+
+Trademarks and names related to “iGEM” and “Grand Jamboree” are the property of 
+the iGEM Foundation and are not covered by this license.
