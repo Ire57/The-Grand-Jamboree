@@ -379,187 +379,105 @@
         }
         
         // --- TOUCH & DRAG & DROP FUNCTIONS ---
+// Guardamos el elemento arrastrado real (tanto para mouse como touch)
+let currentDraggedElement = null;
 
-        // Variables globales para el manejo de arrastre táctil
-        window._touch_drag_data = {
-            element: null,
-            type: null,
-            name: null,
-            clone: null,
-        };
+function initializeDragAndDrop() {
+    const reactifsContainer = document.getElementById('reactifs-container');
+    const pcrTubeDrop = document.getElementById('pcr-tube-drop');
 
-        function initializeDragAndDrop() {
-            const reactifsContainer = document.getElementById('reactifs-container');
-            const pcrTubeDrop = document.getElementById('pcr-tube-drop');
-            
-            // 1. Mouse Drag Events
-            reactifsContainer.addEventListener('dragstart', (e) => {
-                const item = e.target.closest('.drag-item');
-                if (item && !item.classList.contains('dropped')) {
-                    e.dataTransfer.setData('data-type', item.dataset.type);
-                    e.dataTransfer.setData('text/plain', item.textContent.trim());
-                    e.dataTransfer.effectAllowed = 'move';
-                }
-            });
-
-            pcrTubeDrop.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = 'move';
-                pcrTubeDrop.classList.add('drag-over');
-            });
-
-            pcrTubeDrop.addEventListener('dragleave', () => {
-                pcrTubeDrop.classList.remove('drag-over');
-            });
-
-            pcrTubeDrop.addEventListener('drop', handleDrop);
-            
-            // 2. Touch Events (for mobile)
-            document.querySelectorAll('.drag-item').forEach(item => {
-                // Usar passive: false para que preventDefault funcione en touchmove
-                item.addEventListener('touchstart', handleTouchStart, { passive: false });
-                item.addEventListener('touchmove', handleTouchMove, { passive: false });
-                item.addEventListener('touchend', handleTouchEnd);
-            });
+    // ✅ Mouse Events
+    reactifsContainer.addEventListener('dragstart', (e) => {
+        const item = e.target.closest('.drag-item');
+        if (item && !item.classList.contains('dropped')) {
+            currentDraggedElement = item;
+            e.dataTransfer.setData('type', item.dataset.type);
         }
+    });
 
-        function handleDrop(e) {
-            e.preventDefault();
-            const pcrTubeDrop = document.getElementById('pcr-tube-drop');
-            pcrTubeDrop.classList.remove('drag-over');
-            
-            // Determinar la fuente de los datos (ratón o táctil)
-            const isTouch = !e.dataTransfer;
-            
-            const dataType = isTouch ? window._touch_drag_data.type : e.dataTransfer.getData('data-type');
-            const reactifName = isTouch ? window._touch_drag_data.name : e.dataTransfer.getData('text/plain');
-            
-            const reactifsContainer = document.getElementById('reactifs-container');
-            const draggedElement = Array.from(reactifsContainer.querySelectorAll('.drag-item')).find(el => el.textContent.trim() === reactifName);
+    pcrTubeDrop.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        pcrTubeDrop.classList.add('drag-over');
+    });
 
-            if (!draggedElement || draggedElement.classList.contains('dropped')) return;
+    pcrTubeDrop.addEventListener('dragleave', () => {
+        pcrTubeDrop.classList.remove('drag-over');
+    });
 
-            if (dataType === 'contaminant') {
-                // Lógica de Contaminación
-                const tubeDrop = document.getElementById('pcr-tube-drop');
-                tubeDrop.style.backgroundColor = '#fef2f2';
-                tubeDrop.style.background = 'none';
-                tubeDrop.innerHTML = '<div class="text-4xl text-red-600">❌</div><div class="text-lg font-bold text-red-700 mt-2">CONTAMINÉ! You must <strong>Répéter</strong>!</div>';
-                
-                updateSleepHours(CONTAMINATION_LOSS);
-                
-                setTimeout(() => {
-                    resetActivity3();
-                }, 1500);
-                return;
-            }
+    pcrTubeDrop.addEventListener('drop', (e) => {
+        e.preventDefault();
+        handleDrop(currentDraggedElement);
+        currentDraggedElement = null;
+    });
 
-            if (dataType === 'correct') {
-                // Lógica de Soltar Correcto
-                pcrComponents++;
-                document.getElementById('tube-contents').textContent = `${pcrComponents}/3 Components`;
-                
-                draggedElement.classList.add('dropped');
-                draggedElement.draggable = false;
-                
-                // Efecto de llenado de líquido (azul)
-                const newHeight = 33 * pcrComponents;
-                pcrTubeDrop.style.background = `linear-gradient(to top, #60a5fa ${newHeight}%, #f9fafb ${newHeight}%)`;
+    // ✅ Touch Events (móvil)
+    document.querySelectorAll('.drag-item').forEach(item => {
+        item.addEventListener('touchstart', (e) => {
+            if (item.classList.contains('dropped')) return;
+            currentDraggedElement = item;
+        });
 
-                if (pcrComponents === 3) {
-                    document.getElementById('protocole-success').classList.remove('hidden');
-                    document.getElementById('activity-3-complete').disabled = false;
-                    pcrTubeDrop.innerHTML = '<div class="text-4xl text-green-600">✅</div><div class="text-lg font-bold text-green-700 mt-2">PROTOCOL <strong>RÉUSSIR</strong>!</div>';
-                    updateScore(40);
-                }
-            }
-        }
-
-
-        function handleTouchStart(e) {
-            if (e.target.closest('.dropped')) return;
-            
-            const originalItem = e.target.closest('.drag-item');
-            if (!originalItem) return;
-
-            // 1. Crear un clon para arrastrar
-            const clone = originalItem.cloneNode(true);
-            clone.classList.add('fixed', 'opacity-75', 'shadow-2xl', 'z-50', 'bg-blue-200', 'border-blue-400');
-            clone.style.width = `${originalItem.offsetWidth}px`;
-            clone.style.height = `${originalItem.offsetHeight}px`;
-            clone.style.transition = 'none';
-            
-            // Posicionar el clon en la ubicación inicial
-            const rect = originalItem.getBoundingClientRect();
-            clone.style.left = `${rect.left}px`;
-            clone.style.top = `${rect.top}px`;
-            
-            document.body.appendChild(clone);
-
-            // 2. Almacenar datos en la variable global
-            window._touch_drag_data = {
-                element: originalItem,
-                type: originalItem.dataset.type,
-                name: originalItem.textContent.trim(),
-                clone: clone
-            };
-        }
-
-        function handleTouchMove(e) {
-            if (!window._touch_drag_data.clone) return;
-
-            e.preventDefault(); // Previene el scroll del móvil
-            
-            const touch = e.touches[0];
-            const clone = window._touch_drag_data.clone;
-            const pcrTubeDrop = document.getElementById('pcr-tube-drop');
-            
-            // Mover el clon con el dedo
-            clone.style.left = `${touch.clientX - clone.offsetWidth / 2}px`;
-            clone.style.top = `${touch.clientY - clone.offsetHeight / 2}px`;
-
-            // Lógica de drag-over
+        item.addEventListener('touchend', (e) => {
             const dropRect = pcrTubeDrop.getBoundingClientRect();
-            const isOverDropZone = touch.clientX > dropRect.left && 
-                                   touch.clientX < dropRect.right &&
-                                   touch.clientY > dropRect.top &&
-                                   touch.clientY < dropRect.bottom;
-                                   
-            if (isOverDropZone) {
-                pcrTubeDrop.classList.add('drag-over');
-            } else {
-                pcrTubeDrop.classList.remove('drag-over');
-            }
-        }
+            const t = e.changedTouches[0];
 
-        function handleTouchEnd(e) {
-            if (!window._touch_drag_data.clone) return;
-            
-            const clone = window._touch_drag_data.clone;
-            const pcrTubeDrop = document.getElementById('pcr-tube-drop');
+            const droppedInside =
+                t.clientX > dropRect.left &&
+                t.clientX < dropRect.right &&
+                t.clientY > dropRect.top &&
+                t.clientY < dropRect.bottom;
 
-            const dropRect = pcrTubeDrop.getBoundingClientRect();
-            const touch = e.changedTouches[0];
-            
-            // Verificar si la soltura ocurrió dentro de la zona de caída
-            const isDropped = touch.clientX > dropRect.left && 
-                              touch.clientX < dropRect.right &&
-                              touch.clientY > dropRect.top &&
-                              touch.clientY < dropRect.bottom;
-
-            if (isDropped) {
-                // Simular el evento 'drop' usando datos táctiles
-                handleDrop({ 
-                    preventDefault: () => {}, 
-                    dataTransfer: null 
-                });
+            if (droppedInside) {
+                handleDrop(currentDraggedElement);
             }
 
-            // Limpieza y reseteo
-            clone.remove();
-            window._touch_drag_data = { element: null, type: null, name: null, clone: null };
-            pcrTubeDrop.classList.remove('drag-over');
+            currentDraggedElement = null;
+        });
+    });
+}
+
+function handleDrop(item) {
+    if (!item || item.classList.contains('dropped')) return;
+
+    const type = item.dataset.type;
+    const pcrTubeDrop = document.getElementById('pcr-tube-drop');
+
+    if (type === "contaminant") {
+        pcrTubeDrop.style.backgroundColor = '#fef2f2';
+        pcrTubeDrop.innerHTML = `
+            <div class="text-4xl text-red-600">❌</div>
+            <div class="text-lg font-bold text-red-700 mt-2">
+                CONTAMINÉ! <strong>Répéter</strong>!
+            </div>`;
+
+        updateSleepHours(-4);
+
+        setTimeout(() => resetActivity3(), 1500);
+        return;
+    }
+
+    if (type === "correct") {
+        pcrComponents++;
+        item.classList.add('dropped');
+        item.draggable = false;
+        item.style.opacity = 0.4;
+
+        const liquidHeight = 33 * pcrComponents;
+        pcrTubeDrop.style.background = `linear-gradient(to top, #60a5fa ${liquidHeight}%, #f9fafb ${liquidHeight}%)`;
+        document.getElementById('tube-contents').textContent = `${pcrComponents}/3 Components`;
+
+        if (pcrComponents === 3) {
+            updateScore(40);
+            document.getElementById('protocole-success').classList.remove('hidden');
+            document.getElementById('activity-3-complete').disabled = false;
+            pcrTubeDrop.innerHTML = `
+                <div class="text-4xl text-green-600">✅</div>
+                <div class="text-lg font-bold text-green-700 mt-2">
+                    PROTOCOL <strong>RÉUSSIR</strong>!
+                </div>`;
         }
+    }
+}
 
         // --- MODIFIED RESET FUNCTION ---
         function resetActivity3() {
