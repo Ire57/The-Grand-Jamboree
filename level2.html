@@ -161,20 +161,25 @@
     <header class="bg-white shadow-sm border-b border-gray-100">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="index.html"><div class="flex items-center space-x-2">
-                    <div class="w-20 h-20 rounded-full flex items-center justify-center">
-                        <img src="FROG skippit RED.png" alt="igem barcelona-ub logo" class="w-full h-full object-cover p-2">
+                <a href="index.html">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-10 h-10 sm:w-20 sm:h-20 rounded-full flex items-center justify-center">
+                            <img src="FROG skippit RED.png" alt="igem barcelona-ub logo" class="w-full h-full object-cover p-2">
+                        </div>
+                        <span class="text-custom-red font-bold text-xl hidden sm:inline-block">LE GRAND JAMBOREE</span>
+                        <span class="text-custom-red font-bold text-xl inline-block sm:hidden">MENU</span> 
                     </div>
-                    <span class="text-custom-red font-bold text-xl">LE GRAND JAMBOREE</span>
-                </div>
                 </a>
-                <div class="flex items-center space-x-4">
-                    
-                    <div class="text-right">
-                        <div class="text-xl font-bold text-gray-900" id="score">0 / 100 pts</div>
-                        <div class="text-sm text-gray-600">💰 Sponsor: <span id="sponsor-money" class="sponsor-money">€5000</span></div>
+                <div class="flex items-center space-x-2 sm:space-x-4"> 
+                    <div class="text-right flex flex-col items-end">
+                        <div class="text-lg sm:text-xl font-bold text-gray-900" id="score">0 / 100 pts</div>
+                        <div class="text-xs sm:text-sm text-gray-600">
+                            <span class="inline-block sm:hidden">💰:</span> 
+                            <span class="hidden sm:inline">💰 Sponsor:</span> 
+                            <span id="sponsor-money" class="sponsor-money font-semibold">€5000</span>
+                        </div>
                     </div>
-                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                    <div class="w-16 sm:w-32 bg-gray-200 rounded-full h-2 flex-shrink-0">
                         <div id="progress-bar" class="progress-bar bg-red-600 h-2 rounded-full" style="width: 0%"></div>
                     </div>
                 </div>
@@ -241,7 +246,7 @@
                         Ethics Mission Accomplished!
                     </div>
                     <button id="activity-2-complete" class="custom-red text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity" onclick="completeActivity(2)" disabled>
-                        ✓ Continue to the Race Against Time
+                        ✓ Continue to the Workshop Sequence
                     </button>
                 </div>
             </div>
@@ -249,21 +254,17 @@
 
         <section id="activity-3" class="activity-section mb-12 hidden">
             <div class="bg-white rounded-xl shadow-lg p-8 fade-in">
-                <h2 class="text-2xl font-bold mb-4 text-gray-800">🏃‍♂️ 3. Race Against Time: Perfect Workshop!</h2>
-                <p class="text-gray-600 mb-4">You have 30 seconds to organize the steps of the perfect workshop! Drag the steps into the Workshop Timeline (1 to 4) in order.</p>
-                <div class="custom-gold text-white rounded-lg p-4 mb-6 text-center">
-                    <div class="text-3xl font-bold" id="timer">30</div>
-                    <div class="text-sm">seconds remaining</div>
-                </div>
-                
-                <div class="grid lg:grid-cols-2 gap-8">
-                    <div>
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">🏃‍♂️ 3. Workshop Sequence: Perfect Workshop!</h2>
+                <p class="text-gray-600 mb-4">Organize the steps of the perfect workshop! Drag the steps into the Workshop Timeline (1 to 4) in order.</p>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    
+                    <div class="w-full lg:w-1/2">
                         <h3 class="font-semibold mb-4 text-gray-700">Steps to Order:</h3>
                         <div class="space-y-3" id="sequence-items">
                             </div>
                     </div>
                     
-                    <div>
+                    <div class="w-full lg:w-1/2">
                         <h3 class="font-semibold mb-4 text-gray-700">Workshop Timeline (Drop Zones):</h3>
                         <div class="space-y-3">
                             <div class="drop-zone p-6 rounded-lg border-2 border-dashed border-gray-300" data-position="1">
@@ -315,8 +316,8 @@
         let flippedCards = new Set();
         let completedMatches = 0;
         let sequenceComplete = false;
-        let timerInterval;
-        let timeLeft = 30; 
+        // ELIMINADO: let timerInterval;
+        // ELIMINADO: let timeLeft = 30; 
         
         // Data for Flashcards (Bilingual)
         const flashcards = [
@@ -480,15 +481,15 @@
                 currentActivity = 2;
                 updateProgress();
             } else if (activityNumber === 2) {
-                // Ethics Mission -> Race Against Time
+                // Ethics Mission -> Workshop Sequence
                 document.getElementById('activity-3').classList.remove('hidden');
                 document.getElementById('activity-3').classList.add('fade-in');
                 currentActivity = 3;
                 updateProgress();
-                startTimer(); // Start the timer for activity 3
+                // ELIMINADO: startTimer();
             } else if (activityNumber === 3) {
-                // Race Against Time -> Final Results
-                clearInterval(timerInterval); // Stop the timer
+                // Workshop Sequence -> Final Results
+                // ELIMINADO: clearInterval(timerInterval);
                 showFinalResults();
                 document.getElementById('final-results').classList.remove('hidden');
                 document.getElementById('final-results').classList.add('fade-in');
@@ -553,39 +554,7 @@
             createConfetti();
         }
 
-        function startTimer() {
-            // Only start the timer if the sequence hasn't been completed yet (in case of quick completion)
-            if (sequenceComplete) return;
-
-            timeLeft = 30; // 30 SEGUNDOS
-            const timerElement = document.getElementById('timer');
-            timerElement.textContent = timeLeft;
-            timerElement.style.color = '';
-            timerElement.classList.remove('pulse-success');
-
-            timerInterval = setInterval(() => {
-                if (sequenceComplete) {
-                    clearInterval(timerInterval);
-                    return;
-                }
-                
-                timeLeft--;
-                timerElement.textContent = timeLeft;
-                
-                if (timeLeft <= 10) {
-                    timerElement.style.color = '#ef4444'; // Red
-                    timerElement.classList.add('pulse-success');
-                }
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    timerElement.textContent = 'DONE!';
-                    timerElement.style.color = '#dc2626';
-                    // Optional: Disable drag and drop if time runs out
-                    document.querySelectorAll('#activity-3 .drag-item').forEach(item => item.draggable = false);
-                }
-            }, 1000);
-        }
+        // ELIMINADO: startTimer function
         
         // --- DRAG & DROP FUNCTIONS ---
 
@@ -624,7 +593,7 @@
         function handleDragOver(e) {
             const zone = e.target.closest('.drop-zone');
             // Only allow drag over if it's a drop zone and the item hasn't been placed yet
-            if (zone && zone.children.length < 2 && !zone.classList.contains('correct')) {
+            if (zone && !zone.classList.contains('correct') && zone.children.length < 2) {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'move';
             }
@@ -632,7 +601,7 @@
 
         function handleDragEnter(e) {
             const zone = e.target.closest('.drop-zone');
-            if (zone && zone.children.length < 2 && !zone.classList.contains('correct')) {
+            if (zone && !zone.classList.contains('correct') && zone.children.length < 2) {
                 zone.classList.add('drag-over');
             }
         }
@@ -707,11 +676,8 @@
         }
 
         function handleActivity3Drop(e, draggedData, zone) {
-            // Check if timer has run out
-            if (timeLeft <= 0) {
-                alert("Time is up! You cannot complete the sequence now.");
-                return;
-            }
+            
+            // ELIMINADO: No hay verificación de tiempo agotado
 
             const draggedOrder = draggedData;
             const targetPosition = zone.dataset.position;
@@ -747,7 +713,7 @@
                 const correctDrops = document.querySelectorAll('#activity-3 .drop-zone.correct').length;
                 if (correctDrops === workshopSequenceData.length) {
                     sequenceComplete = true;
-                    clearInterval(timerInterval);
+                    // ELIMINADO: clearInterval(timerInterval);
                     document.getElementById('sequence-success').classList.remove('hidden');
                     document.getElementById('activity-3-complete').disabled = false;
                     document.getElementById('activity-3-complete').classList.add('pulse-success');
