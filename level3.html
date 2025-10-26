@@ -112,10 +112,10 @@
         }
 
         /* Background Color Transitions (More Drastic) */
-.bg-calme { background-color: #dbeafe; } /* Azul suave (Calmado) - Sin cambios */
-.bg-pression { background-color: #fca5a5; } /* Rojo intermedio (Antes Amarillo 200, ahora Red 300) */
-.bg-panique { background-color: #ef4444; } /* Rojo fuerte (Antes Red 200, ahora Red 500) */
-.bg-final-panique { background-color: #b91c1c; } /* Rojo muy oscuro/intenso (Antes Red 400, ahora Red 700) */
+        .bg-calme { background-color: #dbeafe; } /* Azul suave (Calmado) - Sin cambios */
+        .bg-pression { background-color: #fca5a5; } /* Rojo intermedio (Antes Amarillo 200, ahora Red 300) */
+        .bg-panique { background-color: #ef4444; } /* Rojo fuerte (Antes Red 200, ahora Red 500) */
+        .bg-final-panique { background-color: #b91c1c; } /* Rojo muy oscuro/intenso (Antes Red 400, ahora Red 700) */
 
         /* Sleep Hours Pulse */
         .sleep-pulse {
@@ -127,6 +127,11 @@
             50% { transform: scale(1.1); background-color: #ef4444; }
             100% { transform: scale(1); background-color: #f59e0b; }
         }
+        
+        /* Mobile-specific adjustments for drop zone */
+        #pcr-tube-drop { 
+            touch-action: none; /* Helps with some mobile drag-and-drop issues */
+        }
     </style>
 </head>
 <body class="min-h-full font-sans transition-all bg-calme" id="game-body">
@@ -134,23 +139,28 @@
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <a href="index.html"><div class="flex items-center space-x-2">
-                    <div class="w-20 h-20 rounded-full flex items-center justify-center">
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center">
                         <img src="FROG skippit RED.png" alt="igem barcelona-ub logo" class="w-full h-full object-cover p-2">
                     </div>
-                    <span class="text-custom-red font-bold text-xl">LE GRAND JAMBOREE</span>
+                    <span class="text-custom-red font-bold text-xl hidden sm:inline-block">LE GRAND JAMBOREE</span>
+                    <span class="text-custom-red font-bold text-xl inline-block sm:hidden">JAMBOREE</span>
                 </div>
                 </a>
-                <div class="flex items-center space-x-4">
-                    <div class="text-right">
-                        <div class="text-xl font-bold text-gray-900" id="score">0 / 105 pts</div>
-                        <div class="text-sm text-gray-600">😴 Sleep Hours: 
-                            <span id="sleep-hours" class="font-bold inline-flex items-center custom-gold text-white px-2 rounded-full">8h</span>
+                
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <div class="text-right sm:text-left">
+                        <div class="text-lg sm:text-xl font-bold text-gray-900" id="score">0 / 105 pts</div>
+                        <div class="text-xs sm:text-sm text-gray-600">
+                             <span class="hidden sm:inline">😴 Sleep Hours:</span> 
+                             <span class="inline sm:hidden">😴:</span> 
+                             <span id="sleep-hours" class="font-bold inline-flex items-center custom-gold text-white px-2 rounded-full">8h</span>
                         </div>
                     </div>
-                    <div class="w-32 bg-gray-200 rounded-full h-2">
+                    <div class="w-20 sm:w-32 bg-gray-200 rounded-full h-2 flex-shrink-0">
                         <div id="progress-bar" class="progress-bar bg-red-600 h-2 rounded-full" style="width: 0%"></div>
                     </div>
                 </div>
+                
             </div>
         </nav>
     </header>
@@ -222,9 +232,9 @@
                 <h2 class="text-2xl font-bold text-gray-900 mb-4">🧪 3. Chaotic Protocol: The PCR of Hope</h2>
                 <p class="text-gray-600 mb-4">Your last chance for a <strong>résultat</strong>. Drag the 3 essential components into the PCR tube so you don't <strong>échouer</strong>!</p>
                 
-                <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12">
+                <div class="flex flex-col-reverse md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-12">
                     
-                    <div id="reactifs-container" class="grid grid-cols-2 gap-4 w-full md:w-1/2">
+                    <div id="reactifs-container" class="grid grid-cols-2 gap-4 w-full md:w-1/2 order-2 md:order-1 mt-8 md:mt-0">
                         <div class="drag-item p-4 rounded-lg text-center" draggable="true" data-type="correct">
                             <span class="font-bold text-lg">Vérifier</span> DNA
                         </div>
@@ -239,7 +249,7 @@
                         </div>
                     </div>
                     
-                    <div id="pcr-tube-drop" class="drop-zone p-6 rounded-lg w-48 h-64 flex items-center justify-center text-center flex-col shadow-inner relative">
+                    <div id="pcr-tube-drop" class="drop-zone p-6 rounded-lg w-full sm:w-48 h-48 sm:h-64 flex items-center justify-center text-center flex-col shadow-inner relative order-1 md:order-2">
                         <div class="text-4xl">🔬</div>
                         <div class="font-semibold text-gray-700 mt-2">PCR Tube (3 Required)</div>
                         <div id="tube-contents" class="absolute bottom-0 w-full p-2 bg-gray-200 text-sm">0/3 Components</div>
@@ -276,6 +286,7 @@
     <script>
         // --- GLOBAL CONSTANTS ---
         const SLEEP_HOUR_LOSS = 0.5; // Half hour lost per mistake
+        const CONTAMINATION_LOSS = 1.0; // 1 full hour lost for contamination
         const DEFAULT_TUBE_HTML = '<div class="text-4xl">🔬</div><div class="font-semibold text-gray-700 mt-2">PCR Tube (3 Required)</div><div id="tube-contents" class="absolute bottom-0 w-full p-2 bg-gray-200 text-sm">0/3 Components</div>';
 
         // --- GLOBAL VARIABLES ---
@@ -513,14 +524,10 @@
                 feedbackText.classList.remove('text-green-700');
                 feedbackText.classList.add('text-red-700');
                 
-                options.forEach(btn => {
-                    if (btn.dataset.correct === 'true') {
-                        btn.classList.add('correct');
-                    }
-                });
+                // ELIMINADA LA LÓGICA PARA MARCAR EL BOTÓN CORRECTO EN VERDE AL FALLAR
                 
                 setTimeout(() => {
-                    loadCrisis(currentCrisisIndex);
+                    loadCrisis(currentCrisisIndex); // Repeat the same crisis
                 }, 2000);
             }
         }
@@ -572,7 +579,7 @@
                     tubeDrop.style.background = 'none'; // Clear any previous fill
                     tubeDrop.innerHTML = '<div class="text-4xl text-red-600">❌</div><div class="text-lg font-bold text-red-700 mt-2">CONTAMINÉ! You must <strong>Répéter</strong>!</div>';
                     
-                    updateSleepHours(1.0); // Lose 1 full hour for contamination
+                    updateSleepHours(CONTAMINATION_LOSS); // Lose 1 full hour for contamination
                     
                     // 2. Timeout to reset the visual and game state
                     setTimeout(() => {
@@ -611,7 +618,6 @@
             pcrTubeDrop.style.background = 'none'; // Remove the blue fill
             
             // 2. Restore default tube content using the constant
-            // THIS LINE IS THE KEY TO FIXING THE PERSISTENT MESSAGE
             pcrTubeDrop.innerHTML = DEFAULT_TUBE_HTML;
 
             // 3. Make all draggable items available again
