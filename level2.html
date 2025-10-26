@@ -264,17 +264,17 @@
                     <div class="w-full lg:w-1/2">
                         <h3 class="font-semibold mb-4 text-gray-700">Workshop Timeline (Drop Zones):</h3>
                         <div class="space-y-3">
-                            <div class="drop-zone p-6 rounded-lg border-2 border-dashed border-gray-300" data-position="1">
-                                <div class="text-center text-gray-500"><div class="text-2xl mb-2">1️⃣</div><div class="font-semibold">Préparation</div></div>
+                            <div class="drop-zone p-4 rounded-lg border-2 border-dashed border-gray-300" data-position="1">
+                                <div class="text-center text-gray-500"><div class="text-xl mb-1">1️⃣</div><div class="font-semibold text-sm">Préparation</div></div>
                             </div>
-                            <div class="drop-zone p-6 rounded-lg border-2 border-dashed border-gray-300" data-position="2">
-                                <div class="text-center text-gray-500"><div class="text-2xl mb-2">2️⃣</div><div class="font-semibold">Formation</div></div>
+                            <div class="drop-zone p-4 rounded-lg border-2 border-dashed border-gray-300" data-position="2">
+                                <div class="text-center text-gray-500"><div class="text-xl mb-1">2️⃣</div><div class="font-semibold text-sm">Formation</div></div>
                             </div>
-                            <div class="drop-zone p-6 rounded-lg border-2 border-dashed border-gray-300" data-position="3">
-                                <div class="text-center text-gray-500"><div class="text-2xl mb-2">3️⃣</div><div class="font-semibold">Pratique</div></div>
+                            <div class="drop-zone p-4 rounded-lg border-2 border-dashed border-gray-300" data-position="3">
+                                <div class="text-center text-gray-500"><div class="text-xl mb-1">3️⃣</div><div class="font-semibold text-sm">Pratique</div></div>
                             </div>
-                            <div class="drop-zone p-6 rounded-lg border-2 border-dashed border-gray-300" data-position="4">
-                                <div class="text-center text-gray-500"><div class="text-2xl mb-2">4️⃣</div><div class="font-semibold">Évaluation</div></div>
+                            <div class="drop-zone p-4 rounded-lg border-2 border-dashed border-gray-300" data-position="4">
+                                <div class="text-center text-gray-500"><div class="text-xl mb-1">4️⃣</div><div class="font-semibold text-sm">Évaluation</div></div>
                             </div>
                         </div>
                     </div>
@@ -313,8 +313,6 @@
         let flippedCards = new Set();
         let completedMatches = 0;
         let sequenceComplete = false;
-        // ELIMINADO: let timerInterval;
-        // ELIMINADO: let timeLeft = 30; 
         
         // Data for Flashcards (Bilingual)
         const flashcards = [
@@ -483,10 +481,8 @@
                 document.getElementById('activity-3').classList.add('fade-in');
                 currentActivity = 3;
                 updateProgress();
-                // ELIMINADO: startTimer();
             } else if (activityNumber === 3) {
                 // Workshop Sequence -> Final Results
-                // ELIMINADO: clearInterval(timerInterval);
                 showFinalResults();
                 document.getElementById('final-results').classList.remove('hidden');
                 document.getElementById('final-results').classList.add('fade-in');
@@ -517,7 +513,6 @@
         
         function createConfetti() {
             // Confetti effect (simplified)
-            // Function for confetti effect (omitted for brevity, assume it exists or is simple like this)
             for (let i = 0; i < 50; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
@@ -550,8 +545,6 @@
             document.getElementById('final-sponsor-budget').textContent = `€${sponsorMoney}`;
             createConfetti();
         }
-
-        // ELIMINADO: startTimer function
         
         // --- DRAG & DROP FUNCTIONS ---
 
@@ -674,8 +667,6 @@
 
         function handleActivity3Drop(e, draggedData, zone) {
             
-            // ELIMINADO: No hay verificación de tiempo agotado
-
             const draggedOrder = draggedData;
             const targetPosition = zone.dataset.position;
             const draggedElement = document.querySelector(`#sequence-items [data-order="${draggedOrder}"]`);
@@ -696,10 +687,10 @@
                 const actionText = originalStepInfo.action;
 
                 zone.innerHTML = `
-                    <div class="text-center text-gray-500 p-2">
-                        <div class="text-2xl mb-2">🎉</div>
-                        <div class="font-semibold text-green-700">${stepTitle} - CORRECT!</div>
-                        <div class="text-sm text-gray-800 mt-1"><strong>ACTION:</strong> ${actionText}</div>
+                    <div class="text-center text-gray-500 p-1">
+                        <div class="text-xl mb-1">🎉</div>
+                        <div class="font-semibold text-green-700 text-sm">${stepTitle} - CORRECT!</div>
+                        <div class="text-xs text-gray-800 mt-1"><strong>ACTION:</strong> ${actionText}</div>
                     </div>
                 `;
 
@@ -710,7 +701,6 @@
                 const correctDrops = document.querySelectorAll('#activity-3 .drop-zone.correct').length;
                 if (correctDrops === workshopSequenceData.length) {
                     sequenceComplete = true;
-                    // ELIMINADO: clearInterval(timerInterval);
                     document.getElementById('sequence-success').classList.remove('hidden');
                     document.getElementById('activity-3-complete').disabled = false;
                     document.getElementById('activity-3-complete').classList.add('pulse-success');
