@@ -308,7 +308,7 @@
         };
         // --- FIN SCROLL-TO-TOP FIX ---
 
-        // Variables y lógica del juego (NO MODIFICADO AQUÍ, pero se asume que existe)
+        // Variables y lógica del juego (Restauradas y Completadas)
         const TOTAL_POINTS = 160;
         let currentScore = 0;
         let sleepHours = 8.0; 
@@ -404,9 +404,8 @@
             }
         }
 
-        // --- Activity 2: Code Crisis (Simulación) ---
+        // --- Activity 2: Code Crisis (RESTAURADO de mi versión anterior para que funcione) ---
         function initCodeCrisis() {
-            // Placeholder logic for the code crisis simulation
             const container = document.getElementById('code-crisis-container');
             container.innerHTML = `
                 <div class="code-block">
@@ -414,9 +413,9 @@
                     &nbsp;&nbsp;<span class="code-highlight">display: none</span><br>
                     }
                 </div>
-                <div class="flex space-x-4 justify-center">
-                    <button onclick="checkCodeFix(true)" class="choice-button bg-green-500 text-white px-6 py-3 rounded-lg font-semibold">Fix 1: Add a semicolon</button>
-                    <button onclick="checkCodeFix(false)" class="choice-button bg-yellow-500 text-white px-6 py-3 rounded-lg font-semibold">Fix 2: Remove the display property</button>
+                <div class="flex space-x-4 justify-center flex-wrap gap-4">
+                    <button onclick="checkCodeFix(true)" class="choice-button bg-green-500 text-white px-6 py-3 rounded-lg font-semibold w-full sm:w-auto">Fix 1: Add a semicolon</button>
+                    <button onclick="checkCodeFix(false)" class="choice-button bg-yellow-500 text-white px-6 py-3 rounded-lg font-semibold w-full sm:w-auto">Fix 2: Remove the display property</button>
                 </div>
             `;
         }
@@ -427,6 +426,7 @@
             feedbackBox.classList.remove('hidden');
             
             if (isCorrect) {
+                updateScore(40);
                 feedbackText.textContent = "CORRECT! The semicolon was missing. 'Une virgule' refers to any small, critical typo.";
                 feedbackText.classList.remove('text-red-600');
                 feedbackText.classList.add('text-green-600');
@@ -538,7 +538,9 @@
                     selectedLeft.disabled = true;
                     element.disabled = true;
                     
+                    selectedLeft.classList.remove('bg-gray-700', 'text-white');
                     selectedLeft = null;
+
                     let matchedCount = document.querySelectorAll('#menu-text-container .correct').length;
                     document.getElementById('matched-count').textContent = `${matchedCount}/4 Matched`;
                     document.getElementById('current-match-text').textContent = "Matched!";
