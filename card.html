@@ -98,19 +98,29 @@
 <div>
 <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Role (in French, e.g., 'un ingénieur')</label>
 <select id="role" class="form-input w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-red-600 focus:outline-none">
-    <option value="">Select your role...</option>
-    <option value="un chef d'équipe">un chef d'équipe (team leader)</option>
-    <option value="un biologiste">un biologiste (biologist)</option>
-    <option value="un ingénieur">un ingénieur (engineer)</option>
-    <option value="un designer">un designer (designer)</option>
-    <option value="un programmeur">un programmeur (programmer)</option>
-    <option value="un chercheur">un chercheur (researcher)</option>
-    <option value="un étudiant">un étudiant (student)</option>
-    <option value="un responsable de laboratoire">un responsable de laboratoire (lab manager)</option>
-    <option value="un spécialiste en communication">un spécialiste en communication (communications)</option>
-    <option value="un responsable sécurité">un responsable sécurité (safety officer)</option>
-    <option value="un responsable documentation">un responsable documentation (documentation)</option>
+    <option value="">Choisis ton rôle...</option>
+
+    <option value="un(e) chef d'équipe">un(e) chef d'équipe (team leader)</option>
+    <option value="un(e) designer">un(e) designer (designer)</option>
+    <option value="un(e) programmeur(e)">un(e) programmeur(e) (programmer)</option>
+    <option value="un(e) chercheur(e)">un(e) chercheur(e) (researcher)</option>
+    <option value="un(e) étudiant(e)">un(e) étudiant(e) (student)</option>
+
+    <option value="un(e) responsable du wet lab">un(e) responsable du wet lab (wet lab manager)</option>
+    <option value="un(e) membre du wet lab">un(e) membre du wet lab (wet lab member)</option>
+    <option value="un(e) responsable du dry lab">un(e) responsable du dry lab (dry lab manager)</option>
+    <option value="un(e) membre du dry lab">un(e) membre du dry lab (dry lab member)</option>
+
+    <option value="un(e) responsable du wiki">un(e) responsable du wiki (wiki manager)</option>
+
+    <option value="un(e) spécialiste en communication">un(e) spécialiste en communication (communications)</option>
+    <option value="un(e) spécialiste en entrepreneuriat">un(e) spécialiste en entrepreneuriat (entrepreneurship)</option>
+    <option value="un(e) responsable de l’éducation">un(e) responsable de l’éducation (education)</option>
+    <option value="un(e) responsable des Human Practices">un(e) responsable des Human Practices</option>
+    
+    <option value="un(e) conseiller(ère)">un(e) conseiller(ère) (advisor)</option>
 </select>
+
 </div>
 <div>
 <label for="project" class="block text-sm font-medium text-gray-700 mb-2">Project Focus</label>
@@ -221,7 +231,7 @@ function generatePreview(){
   // Front
   document.getElementById('card-name-front').textContent=name.toUpperCase();
   document.getElementById('card-role-front').textContent=role.replace('un ','').replace('une ','').toUpperCase();
-  document.getElementById('card-introduction').textContent=`Bonjour ! Je m'appelle ${name}, ${role} ${country}.`;
+  document.getElementById('card-introduction').textContent=`Bonjour ! Je m'appelle ${name}, ${role} du ${country}.`;
 
   // Back
   document.getElementById('card-team').textContent=team.toUpperCase();
