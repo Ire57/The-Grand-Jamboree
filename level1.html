@@ -244,94 +244,17 @@
                         <span class="mr-2">🌟</span>
                         Bravo! Perfect conversation!
                     </div>
-                    <button onclick="completeActivity(3)" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
-                        Continue to ID Card Creator →
+                    <button onclick="nextLevel()" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
+                        Finish Level 1! →
                     </button>
                 </div>
             </div>
         </section>
 
-        <!-- Activity 4: ID Card -->
-        <section id="activity-4" class="activity-section mb-12 hidden">
-            <div class="bg-white rounded-xl shadow-lg p-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">🧑‍💻 4. Create Your iGEM ID Card</h2>
-                <p class="text-gray-600 mb-6">Fill in the blanks to create your iGEM identity card in French</p>
-                
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div>
-                        <form id="id-card-form" class="space-y-4">
-                            <div>
-                                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Your Name:</label>
-                                <input type="text" id="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500" placeholder="Enter your name">
-                            </div>
-                            <div>
-                                <label for="country" class="block text-sm font-medium text-gray-700 mb-2">Country:</label>
-                                <select id="country" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                                    <option value="">Choose a country</option>
-                                    <option value="Espagne">Espagne</option>
-                                    <option value="France">France</option>
-                                    <option value="Italie">Italie</option>
-                                    <option value="Allemagne">Allemagne</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Role:</label>
-                                <select id="role" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500">
-                                    <option value="">Choose your role</option>
-                                    <option value="biologie">biologie</option>
-                                    <option value="wiki">wiki</option>
-                                    <option value="communication">communication</option>
-                                    <option value="design">design</option>
-                                </select>
-                            </div>
-                            <button type="button" onclick="generateCard()" class="w-full custom-red text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity">
-                                Create My Card
-                            </button>
-                        </form>
-                        <div id="id-card-success" class="hidden mt-4 text-center">
-                            <button onclick="completeActivity(4)" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
-                                Continue to Final Quiz →
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <div id="id-card-preview" class="hidden">
-                            <div class="bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-xl p-6 text-center">
-                                <div class="w-16 h-16 custom-red rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <span class="text-white text-2xl">👋</span>
-                                </div>
-                                <div id="card-content" class="space-y-2 text-gray-800">
-                                    <!-- Card content will be generated here -->
-                                </div>
-                                <div class="mt-4 text-xs text-gray-500">iGEM Team Member</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+       
 
         <!-- Activity 5: Quick Quiz -->
-        <section id="activity-5" class="activity-section mb-12 hidden">
-            <div class="bg-white rounded-xl shadow-lg p-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">🧩 5. Quick Quiz</h2>
-                <p class="text-gray-600 mb-6">Review key words and meanings</p>
-                
-                <div id="quiz-container" class="space-y-6">
-                    <!-- Quiz questions will be generated here -->
-                </div>
-                
-                <div id="quiz-success" class="hidden mt-6 text-center">
-                    <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-lg mb-4">
-                        <span class="mr-2">🎯</span>
-                        Excellent! You've mastered the basics!
-                    </div>
-                    <button onclick="completeActivity(5)" class="custom-red text-white px-6 py-2 rounded-lg hover:opacity-90 transition-opacity">
-                        Complete Level 1 →
-                    </button>
-                </div>
-            </div>
-        </section>
+        
 
         <!-- Completion Screen -->
         <section id="completion-screen" class="hidden">
@@ -345,10 +268,7 @@
                     <p class="text-gray-700 mb-8">You can now introduce yourself in French and describe your iGEM role.</p>
                 </div>
                 
-                <div class="bg-gradient-to-r from-yellow-50 to-yellow-100 border-2 border-yellow-300 rounded-lg p-6 mb-8">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Secret word:</h3>
-                    <div class="text-3xl font-bold text-custom-red">🗝️ ÉQUIPE</div>
-                </div>
+              
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <button onclick="nextLevel()" class="custom-gold text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity">
@@ -702,8 +622,23 @@
         }
         
         function nextLevel() {
-            alert('🎉 Level 2 coming soon! You\'ll learn about Human Practices & Education in French!');
-        }
+    const activity3 = document.getElementById("activity-3");
+    const completion = document.getElementById("completion-screen");
+
+    // Si todavía estamos en Fill-in-the-Blank → ir a completion screen
+    if (!activity3.classList.contains("hidden")) {
+        activity3.classList.add("hidden");
+        completion.classList.remove("hidden");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+    }
+
+    // Si ya estamos en completion → ir al siguiente nivel (nueva página o sección)
+    if (!completion.classList.contains("hidden")) {
+        window.location.href = "level2.html"; // Cambia por tu página real del Nivel 2
+    }
+}
+
         
         function reviewVocabulary() {
             // Reset to first activity

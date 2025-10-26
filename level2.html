@@ -96,6 +96,7 @@
             border: 2px dashed #d1d5db;
             min-height: 80px;
             background-color: #f9fafb;
+            padding: 20px; /* Added padding for better mobile target */
         }
         
         .drop-zone.drag-over {
@@ -160,19 +161,15 @@
     <header class="bg-white shadow-sm border-b border-gray-100">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <a href="index.html" class="flex items-center space-x-2">
-                    <div class="w-8 h-8 custom-red rounded-full flex items-center justify-center">
-                        <span class="text-white font-bold text-sm">iG</span>
+                <a href="index.html"><div class="flex items-center space-x-2">
+                    <div class="w-20 h-20 rounded-full flex items-center justify-center">
+                        <img src="FROG skippit RED.png" alt="igem barcelona-ub logo" class="w-full h-full object-cover p-2">
                     </div>
-                    <span class="text-gray-900 font-medium">Le Grand Jamboree</span>
+                    <span class="text-custom-red font-bold text-xl">LE GRAND JAMBOREE</span>
+                </div>
                 </a>
                 <div class="flex items-center space-x-4">
-                    <a href="index.html" class="custom-red text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-red-700 transition duration-150 ease-in-out hover:shadow-lg flex items-center space-x-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                        </svg>
-                        <span>Menu</span>
-                    </a>
+                    
                     <div class="text-right">
                         <div class="text-xl font-bold text-gray-900" id="score">0 / 100 pts</div>
                         <div class="text-sm text-gray-600">💰 Sponsor: <span id="sponsor-money" class="sponsor-money">€5000</span></div>
@@ -224,36 +221,17 @@
                 </div>
 
                 
-                <div class="grid md:grid-cols-2 gap-8">
+                <div class="grid lg:grid-cols-2 gap-8">
                     <div>
                         <h3 class="font-semibold mb-4 text-gray-700">Ethical Actions:</h3>
-                        <div class="space-y-3">
-    <div class="drag-item p-4 rounded-lg border hover:shadow-lg transition-all" draggable="true" data-answer="transparence">
-        "I need to explain the risks of the technology to the public."
-    </div>
-    <div class="drag-item p-4 rounded-lg border hover:shadow-lg transition-all" draggable="true" data-answer="engagement">
-        "We will listen to the concerns of the local community."
-    </div>
-    <div class="drag-item p-4 rounded-lg border hover:shadow-lg transition-all" draggable="true" data-answer="responsabilite">
-        "We must share our safety data with other teams."
-    </div>
-</div>
-
+                        <div class="space-y-3" id="drag-items-activity-2">
+                            </div>
                     </div>
                     
                     <div>
                         <h3 class="font-semibold mb-4 text-gray-700">Key Concepts (Drop Zones):</h3>
-                        <div class="space-y-3">
-                            <div class="drop-zone p-6 rounded-lg flex items-center justify-center text-center" data-target="transparence">
-                                <div><div class="text-2xl mb-2">🔍</div><div class="text-lg font-semibold text-gray-800">Transparence</div></div>
+                        <div class="space-y-3" id="drop-zones-activity-2">
                             </div>
-                            <div class="drop-zone p-6 rounded-lg flex items-center justify-center text-center" data-target="engagement">
-                                <div><div class="text-2xl mb-2">🤝</div><div class="text-lg font-semibold text-gray-800">Engagement</div></div>
-                            </div>
-                            <div class="drop-zone p-6 rounded-lg flex items-center justify-center text-center" data-target="responsabilite">
-                                <div><div class="text-2xl mb-2">📋</div><div class="text-lg font-semibold text-gray-800">Responsabilité</div></div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 
@@ -278,27 +256,11 @@
                     <div class="text-sm">seconds remaining</div>
                 </div>
                 
-                <div class="grid md:grid-cols-2 gap-8">
+                <div class="grid lg:grid-cols-2 gap-8">
                     <div>
                         <h3 class="font-semibold mb-4 text-gray-700">Steps to Order:</h3>
                         <div class="space-y-3" id="sequence-items">
-                            <div class="drag-item sequence-item p-4 rounded-lg border cursor-pointer hover:scale-105 transition-transform" draggable="true" data-order="2">
-                                <div class="font-semibold">📚 </div>
-                                <div>"Next, teach the basics of the project in a simple way."</div>
                             </div>
-                            <div class="drag-item sequence-item p-4 rounded-lg border cursor-pointer hover:scale-105 transition-transform" draggable="true" data-order="4">
-                                <div class="font-semibold">📝 </div>
-                                <div>"Learn from our mistakes and make a report."</div>
-                            </div>
-                            <div class="drag-item sequence-item p-4 rounded-lg border cursor-pointer hover:scale-105 transition-transform" draggable="true" data-order="1">
-                                <div class="font-semibold">🏗️ </div>
-                                <div>"Organize the room and the materials."</div>
-                            </div>
-                            <div class="drag-item sequence-item p-4 rounded-lg border cursor-pointer hover:scale-105 transition-transform" draggable="true" data-order="3">
-                                <div class="font-semibold">🧪 </div>
-                                <div>"Show a small experiment to illustrate the science."</div>
-                            </div>
-                        </div>
                     </div>
                     
                     <div>
@@ -341,7 +303,7 @@
                 <div class="text-sm mt-2">You are ready for the iGEM Jamboree!</div>
             </div>
             <a href="level3.html" class="custom-red text-white px-8 py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition-opacity">
-                🚀 Proceed to Level 3: Oral Presentation
+                🚀 Proceed to Level 3: All-Nighter Lab
             </a>
         </section>
     </main>
@@ -354,7 +316,7 @@
         let completedMatches = 0;
         let sequenceComplete = false;
         let timerInterval;
-        let timeLeft = 30; // REDUCIDO A 30 SEGUNDOS
+        let timeLeft = 30; 
         
         // Data for Flashcards (Bilingual)
         const flashcards = [
@@ -369,10 +331,37 @@
             { french: "Évaluation", english: "Evaluation / Évaluation" }
         ];
 
+        // Data for Activity 2 (Ethics Mission)
+        const ethicsData = [
+            { concept: "transparence", action: '"I need to explain the risks of the technology to the public."' },
+            { concept: "engagement", action: '"We will listen to the concerns of the local community."' },
+            { concept: "responsabilite", action: '"We must share our safety data with other teams."' }
+        ];
+
+        // Data for Activity 3 (Workshop Sequence)
+        const workshopSequenceData = [
+            { order: "1", title: "🏗️ ", action: '"Organize the room and the materials."'},
+            { order: "2", title: "📚 ", action: '"Next, teach the basics of the project in a simple way."'},
+            { order: "3", title: "🧪 ", action: '"Show a small experiment to illustrate the science."'},
+            { order: "4", title: "📝 ", action: '"Learn from our mistakes and make a report."'}
+        ];
+
+        // Utility function to shuffle an array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+
         // --- GAME FLOW FUNCTIONS ---
 
         function initGame() {
             generateFlashcards();
+            generateEthicsMission();
+            generateWorkshopSequence();
             initializeDragAndDrop(); 
             updateProgress();
             updateSponsorMoney();
@@ -386,7 +375,7 @@
             
             const cardsToShow = flashcards.slice(0, 9);
             
-            cardsToShow.forEach((card, index) => {
+            cardsToShow.forEach((card) => {
                 const cardElement = document.createElement('div');
                 cardElement.className = 'flip-card';
                 cardElement.innerHTML = `
@@ -412,6 +401,61 @@
                 });
                 
                 container.appendChild(cardElement);
+            });
+        }
+
+        function generateEthicsMission() {
+            const dragContainer = document.getElementById('drag-items-activity-2');
+            const dropContainer = document.getElementById('drop-zones-activity-2');
+            dragContainer.innerHTML = '';
+            dropContainer.innerHTML = '';
+
+            const shuffledEthicsActions = shuffleArray([...ethicsData]);
+            const shuffledEthicsConcepts = shuffleArray([...ethicsData]); // Shuffle for drop zones too
+
+            // Generate Drag Items (Ethical Actions)
+            shuffledEthicsActions.forEach(item => {
+                const dragItem = document.createElement('div');
+                dragItem.className = 'drag-item p-4 rounded-lg border hover:shadow-lg transition-all';
+                dragItem.draggable = true;
+                dragItem.setAttribute('data-answer', item.concept);
+                dragItem.textContent = item.action;
+                dragContainer.appendChild(dragItem);
+            });
+
+            // Generate Drop Zones (Key Concepts)
+            shuffledEthicsConcepts.forEach(item => {
+                let icon;
+                if (item.concept === 'transparence') icon = '🔍';
+                else if (item.concept === 'engagement') icon = '🤝';
+                else if (item.concept === 'responsabilite') icon = '📋';
+
+                const dropZone = document.createElement('div');
+                dropZone.className = 'drop-zone p-6 rounded-lg flex items-center justify-center text-center';
+                dropZone.setAttribute('data-target', item.concept);
+                dropZone.innerHTML = `
+                    <div><div class="text-2xl mb-2">${icon}</div><div class="text-lg font-semibold text-gray-800">${item.concept.charAt(0).toUpperCase() + item.concept.slice(1)}</div></div>
+                `;
+                dropContainer.appendChild(dropZone);
+            });
+        }
+
+        function generateWorkshopSequence() {
+            const sequenceContainer = document.getElementById('sequence-items');
+            sequenceContainer.innerHTML = '';
+
+            const shuffledSequenceItems = shuffleArray([...workshopSequenceData]);
+
+            shuffledSequenceItems.forEach(item => {
+                const sequenceItem = document.createElement('div');
+                sequenceItem.className = 'drag-item sequence-item p-4 rounded-lg border cursor-pointer hover:scale-105 transition-transform';
+                sequenceItem.draggable = true;
+                sequenceItem.setAttribute('data-order', item.order);
+                sequenceItem.innerHTML = `
+                    <div class="font-semibold">${item.title}</div>
+                    <div>${item.action}</div>
+                `;
+                sequenceContainer.appendChild(sequenceItem);
             });
         }
         
@@ -453,6 +497,7 @@
         }
 
         function updateProgress() {
+            // Updated to reflect 3 activities (1, 2, 3)
             const progress = Math.round(((currentActivity - 1) / 3) * 100);
             document.getElementById('progress-bar').style.width = `${progress}%`;
         }
@@ -473,14 +518,28 @@
         }
         
         function createConfetti() {
+            // Confetti effect (simplified)
             // Function for confetti effect (omitted for brevity, assume it exists or is simple like this)
             for (let i = 0; i < 50; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.borderRadius = '50%';
+                confetti.style.zIndex = '9999';
                 confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.opacity = '0';
+                confetti.style.transition = 'opacity 0.1s, transform 3s';
+                confetti.style.transform = `translateY(${Math.random() * 100}vh) rotate(${Math.random() * 360}deg)`;
                 confetti.style.animationDelay = Math.random() * 3 + 's';
                 confetti.style.backgroundColor = ['#f59e0b', '#dc2626', '#10b981', '#3b82f6'][Math.floor(Math.random() * 4)];
                 document.body.appendChild(confetti);
+
+                setTimeout(() => {
+                    confetti.style.opacity = '1';
+                }, 10);
                 
                 setTimeout(() => {
                     confetti.remove();
@@ -495,6 +554,9 @@
         }
 
         function startTimer() {
+            // Only start the timer if the sequence hasn't been completed yet (in case of quick completion)
+            if (sequenceComplete) return;
+
             timeLeft = 30; // 30 SEGUNDOS
             const timerElement = document.getElementById('timer');
             timerElement.textContent = timeLeft;
@@ -502,6 +564,11 @@
             timerElement.classList.remove('pulse-success');
 
             timerInterval = setInterval(() => {
+                if (sequenceComplete) {
+                    clearInterval(timerInterval);
+                    return;
+                }
+                
                 timeLeft--;
                 timerElement.textContent = timeLeft;
                 
@@ -514,6 +581,8 @@
                     clearInterval(timerInterval);
                     timerElement.textContent = 'DONE!';
                     timerElement.style.color = '#dc2626';
+                    // Optional: Disable drag and drop if time runs out
+                    document.querySelectorAll('#activity-3 .drag-item').forEach(item => item.draggable = false);
                 }
             }, 1000);
         }
@@ -533,9 +602,12 @@
 
         function handleDragStart(e) {
             const item = e.target.closest('.drag-item');
+            // Check if the item is explicitly draggable (e.g., to prevent dragging if disabled)
             if (item && item.draggable) {
                 item.classList.add('dragging');
-                e.dataTransfer.setData('text/plain', item.dataset.answer || item.dataset.order);
+                // Use different data for different activities
+                const data = item.dataset.answer || item.dataset.order;
+                e.dataTransfer.setData('text/plain', data);
                 e.dataTransfer.effectAllowed = 'move';
             } else {
                  e.preventDefault(); 
@@ -551,7 +623,8 @@
 
         function handleDragOver(e) {
             const zone = e.target.closest('.drop-zone');
-            if (zone) {
+            // Only allow drag over if it's a drop zone and the item hasn't been placed yet
+            if (zone && zone.children.length < 2 && !zone.classList.contains('correct')) {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'move';
             }
@@ -559,7 +632,7 @@
 
         function handleDragEnter(e) {
             const zone = e.target.closest('.drop-zone');
-            if (zone) {
+            if (zone && zone.children.length < 2 && !zone.classList.contains('correct')) {
                 zone.classList.add('drag-over');
             }
         }
@@ -573,7 +646,8 @@
 
         function handleDrop(e) {
             const zone = e.target.closest('.drop-zone');
-            if (!zone) return;
+            // Stop if not a drop zone, or if a correct item is already placed (for activity 2)
+            if (!zone || zone.classList.contains('correct') && currentActivity === 2) return;
 
             e.preventDefault();
             zone.classList.remove('drag-over');
@@ -589,17 +663,18 @@
 
         function handleActivity2Drop(e, draggedData, zone) {
             const targetType = zone.dataset.target;
-            const draggedElement = document.querySelector(`[data-answer="${draggedData}"]`);
+            const draggedElement = document.querySelector(`#drag-items-activity-2 [data-answer="${draggedData}"]`);
             
             if (draggedData === targetType) {
                 zone.classList.add('correct');
                 zone.classList.remove('incorrect');
                 
+                // Extract original content before overwriting
                 const conceptTitleHTML = zone.querySelector('.text-lg').outerHTML;
                 const actionText = draggedElement.textContent.trim();
                 
                 zone.innerHTML = `
-                    <div>
+                    <div class="p-2">
                         <div class="text-2xl mb-2">✅</div>
                         ${conceptTitleHTML}
                         <div class="text-sm text-gray-600 mt-1"><strong>CORRECT:</strong> ${actionText}</div>
@@ -609,11 +684,12 @@
                 completedMatches++;
                 
                 if (draggedElement) {
-                    draggedElement.style.opacity = '0.3';
+                    // Remove the drag item from the drag area to show it's used
+                    draggedElement.style.display = 'none'; 
                     draggedElement.draggable = false;
                 }
                 
-                if (completedMatches === 3) {
+                if (completedMatches === ethicsData.length) {
                     document.getElementById('matching-success').classList.remove('hidden');
                     document.getElementById('activity-2-complete').disabled = false;
                     document.getElementById('activity-2-complete').classList.add('pulse-success');
@@ -631,30 +707,45 @@
         }
 
         function handleActivity3Drop(e, draggedData, zone) {
+            // Check if timer has run out
+            if (timeLeft <= 0) {
+                alert("Time is up! You cannot complete the sequence now.");
+                return;
+            }
+
             const draggedOrder = draggedData;
             const targetPosition = zone.dataset.position;
             const draggedElement = document.querySelector(`#sequence-items [data-order="${draggedOrder}"]`);
             
+            // Check if a drop zone is already filled, only for sequence
+            if (zone.querySelector('.text-green-700')) {
+                // Already filled correctly, should not happen but a safeguard
+                return;
+            }
+
             if (draggedElement && draggedOrder === targetPosition && zone.children.length < 2) {
                 zone.classList.add('correct');
                 zone.classList.remove('incorrect');
                 
-                const stepTitleHTML = draggedElement.querySelector('.font-semibold').innerHTML; // The French word
-                const actionText = draggedElement.querySelector('div:last-child').textContent;
+                // Find the original content
+                const originalStepInfo = workshopSequenceData.find(item => item.order === draggedOrder);
+                const stepTitle = originalStepInfo.title; // The emoji
+                const actionText = originalStepInfo.action;
 
                 zone.innerHTML = `
-                    <div class="text-center text-gray-500">
+                    <div class="text-center text-gray-500 p-2">
                         <div class="text-2xl mb-2">🎉</div>
-                        <div class="font-semibold text-green-700">${stepTitleHTML} - CORRECT!</div>
+                        <div class="font-semibold text-green-700">${stepTitle} - CORRECT!</div>
+                        <div class="text-sm text-gray-800 mt-1"><strong>ACTION:</strong> ${actionText}</div>
                     </div>
-                    <div class="text-sm text-gray-800 p-2 mt-1"><strong>ACTION:</strong> ${actionText}</div>
                 `;
 
-                draggedElement.style.opacity = '0.3';
+                // Hide the element from the drag area
+                draggedElement.style.display = 'none';
                 draggedElement.draggable = false;
                 
                 const correctDrops = document.querySelectorAll('#activity-3 .drop-zone.correct').length;
-                if (correctDrops === 4) {
+                if (correctDrops === workshopSequenceData.length) {
                     sequenceComplete = true;
                     clearInterval(timerInterval);
                     document.getElementById('sequence-success').classList.remove('hidden');
